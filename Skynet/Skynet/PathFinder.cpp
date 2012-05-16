@@ -5,7 +5,7 @@
 #include "DrawBuffer.h"
 #include "Logger.h"
 
-BuildTilePath PathFinderClass::CreateTilePath(TilePosition start, TilePosition target, std::tr1::function<bool (TilePosition)> tileTest, std::tr1::function<int (TilePosition, TilePosition, int)> gFunction, std::tr1::function<int (TilePosition, TilePosition)> hFunction, int maxGValue, bool diaganol)
+BuildTilePath PathFinderClass::CreateTilePath(TilePosition start, TilePosition target, std::function<bool (TilePosition)> tileTest, std::function<int (TilePosition, TilePosition, int)> gFunction, std::function<int (TilePosition, TilePosition)> hFunction, int maxGValue, bool diaganol)
 {
 	BuildTilePath path;
 
@@ -249,7 +249,7 @@ PositionPath PathFinderClass::CreateCheapWalkPath(Position start, Position targe
 	return path;
 }
 
-WalkPositionPath PathFinderClass::CreateWalkPath(WalkPosition start, WalkPosition target, std::tr1::function<bool (WalkPosition)> tileTest, std::tr1::function<int (WalkPosition, WalkPosition, int)> gFunction, std::tr1::function<int (WalkPosition, WalkPosition)> hFunction, int maxGValue, bool diaganol)
+WalkPositionPath PathFinderClass::CreateWalkPath(WalkPosition start, WalkPosition target, std::function<bool (WalkPosition)> tileTest, std::function<int (WalkPosition, WalkPosition, int)> gFunction, std::function<int (WalkPosition, WalkPosition)> hFunction, int maxGValue, bool diaganol)
 {
 	WalkPositionPath path;
 

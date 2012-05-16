@@ -7,7 +7,7 @@
 #include "BaseTracker.h"
 #include "PathFinder.h"
 
-TilePosition MapHelper::spiralSearch(TilePosition startLocation, std::tr1::function<bool (TilePosition)> testFunction, int maxRadius)
+TilePosition MapHelper::spiralSearch(TilePosition startLocation, std::function<bool (TilePosition)> testFunction, int maxRadius)
 {
 	int x = startLocation.x();
 	int y = startLocation.y();
@@ -65,7 +65,7 @@ TilePosition MapHelper::spiralSearch(TilePosition startLocation, std::tr1::funct
 	return BWAPI::TilePositions::None;
 }
 
-std::set<TilePosition> MapHelper::floodFill(TilePosition start, std::tr1::function<bool (TilePosition)> testFunction, std::set<TilePosition> targets, std::set<TilePosition> ignoreTiles)
+std::set<TilePosition> MapHelper::floodFill(TilePosition start, std::function<bool (TilePosition)> testFunction, std::set<TilePosition> targets, std::set<TilePosition> ignoreTiles)
 {
 	bool noTargets = targets.empty();
 
@@ -106,7 +106,7 @@ std::set<TilePosition> MapHelper::floodFill(TilePosition start, std::tr1::functi
 	return targets;
 }
 
-std::map<WalkPosition, int> MapHelper::walkSearch(WalkPosition start, std::tr1::function<bool (WalkPosition)> testFunction, std::set<WalkPosition> targets, std::set<WalkPosition> ignoreTiles)
+std::map<WalkPosition, int> MapHelper::walkSearch(WalkPosition start, std::function<bool (WalkPosition)> testFunction, std::set<WalkPosition> targets, std::set<WalkPosition> ignoreTiles)
 {
 	std::map<WalkPosition, int> returnDistances;
 
@@ -219,7 +219,7 @@ bool MapHelper::mapIs(std::string name)
 
 	std::transform(name.begin(), name.end(), name.begin(), tolower);
 
-	return std::tr1::regex_search(mapName.begin(), mapName.end(), std::tr1::regex(name)) || std::tr1::regex_search(mapFileName.begin(), mapFileName.end(), std::tr1::regex(name));
+	return std::regex_search(mapName.begin(), mapName.end(), std::regex(name)) || std::regex_search(mapFileName.begin(), mapFileName.end(), std::regex(name));
 }
 
 int MapHelper::getGroundDistance(Position start, Position end)

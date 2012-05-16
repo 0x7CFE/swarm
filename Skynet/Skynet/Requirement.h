@@ -28,7 +28,7 @@ typedef SafeEnum<RequirementTypeDef> RequirementType;
 
 // Forward declare Task and TaskPointer
 class Task;
-typedef std::tr1::shared_ptr<Task> TaskPointer;
+typedef std::shared_ptr<Task> TaskPointer;
 
 class Requirement
 {

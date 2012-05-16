@@ -84,7 +84,7 @@ public:
 
 	virtual void setRequiredSatisfyTime(RequirementGroup requirements, int time, int delay) {};
 	virtual void updateRequirements() {};
-	void updateRequirements(std::tr1::function<bool (RequirementGroup)> updateFunction)
+	void updateRequirements(std::function<bool (RequirementGroup)> updateFunction)
 	{
 		for(std::list<RequirementGroup>::iterator it = mRequirements.begin(); it != mRequirements.end();)
 		{
@@ -112,4 +112,4 @@ private:
 	TaskType mTaskType;
 };
 
-typedef std::tr1::shared_ptr<Task> TaskPointer;
+typedef std::shared_ptr<Task> TaskPointer;

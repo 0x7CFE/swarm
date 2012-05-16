@@ -43,4 +43,4 @@ protected:
 	ArmyBehaviour mArmyBehaviour;
 };
 
-typedef std::tr1::shared_ptr<BaseSquadTask> BaseSquadTaskPointer;
+typedef std::shared_ptr<BaseSquadTask> BaseSquadTaskPointer;
