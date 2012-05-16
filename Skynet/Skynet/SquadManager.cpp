@@ -27,7 +27,7 @@ void SquadManagerClass::update()
 	{
 		if(!base->getEnemyThreats().empty() && (base->getNumberOfTechBuildings() > 0 || (!base->isMinedOut() && base->getResourceDepot())) && mDefenseSquads.count(base) == 0)
 		{
-			DefenseSquadPointer squad = std::tr1::static_pointer_cast<DefenseSquadTask>(createSquad(SquadType::DefenseSquad));
+			DefenseSquadPointer squad = std::static_pointer_cast<DefenseSquadTask>(createSquad(SquadType::DefenseSquad));
 			squad->setGoal(Goal(ActionType::Defend, base));
 			mDefenseSquads[base] = squad;
 		}

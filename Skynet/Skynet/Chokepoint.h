@@ -3,8 +3,8 @@
 #include "Interface.h"
 
 class RegionClass;
-typedef std::tr1::shared_ptr<RegionClass> Region;
-typedef std::tr1::weak_ptr<RegionClass> WeakRegion;
+typedef std::shared_ptr<RegionClass> Region;
+typedef std::weak_ptr<RegionClass> WeakRegion;
 
 class ChokepointClass
 {
@@ -36,5 +36,5 @@ private:
 	int mClearance;
 };
 
-typedef std::tr1::shared_ptr<ChokepointClass> Chokepoint;
-typedef std::tr1::weak_ptr<ChokepointClass> WeakChokepoint;
+typedef std::shared_ptr<ChokepointClass> Chokepoint;
+typedef std::weak_ptr<ChokepointClass> WeakChokepoint;

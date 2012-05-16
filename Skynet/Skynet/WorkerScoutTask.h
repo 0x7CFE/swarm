@@ -63,4 +63,4 @@ private:
 	void getNewData();
 };
 
-typedef std::tr1::shared_ptr<WorkerScoutTask> WorkerScoutTaskPointer;
+typedef std::shared_ptr<WorkerScoutTask> WorkerScoutTaskPointer;

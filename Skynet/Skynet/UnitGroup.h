@@ -3,7 +3,7 @@
 #include "Interface.h"
 
 class RegionClass;
-typedef std::tr1::shared_ptr<RegionClass> Region;
+typedef std::shared_ptr<RegionClass> Region;
 
 class UnitGroup
 {

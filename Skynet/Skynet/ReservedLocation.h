@@ -34,7 +34,7 @@ struct BuildingLocationDef
 };
 typedef SafeEnum<BuildingLocationDef> BuildingLocation;
 
-class ReservedLocationClass : public std::tr1::enable_shared_from_this<ReservedLocationClass>
+class ReservedLocationClass : public std::enable_shared_from_this<ReservedLocationClass>
 {
 public:
 	ReservedLocationClass(BWAPI::UnitType type, BuildingLocation location);
@@ -82,4 +82,4 @@ private:
 	bool mForcedCompleted;
 };
 
-typedef std::tr1::shared_ptr<ReservedLocationClass> ReservedLocation;
+typedef std::shared_ptr<ReservedLocationClass> ReservedLocation;

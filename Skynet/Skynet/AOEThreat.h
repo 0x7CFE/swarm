@@ -24,4 +24,4 @@ private:
 	Unit mUnit;
 	BWAPI::Bullet* mBullet;
 };
-typedef std::tr1::shared_ptr<AOEThreatClass> AOEThreat;
+typedef std::shared_ptr<AOEThreatClass> AOEThreat;

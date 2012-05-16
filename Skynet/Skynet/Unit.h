@@ -38,7 +38,7 @@ struct AccessTypeDef
 };
 typedef SafeEnum<AccessTypeDef> AccessType;
 
-class UnitClass : public std::tr1::enable_shared_from_this<UnitClass>
+class UnitClass : public std::enable_shared_from_this<UnitClass>
 {
 public:
 	UnitClass(BWAPI::Unit* unit);
@@ -216,7 +216,7 @@ private:
 	int mLastOrderExecuteTime;
 };
 
-typedef std::tr1::shared_ptr<UnitClass> Unit;
+typedef std::shared_ptr<UnitClass> Unit;
 
 class StaticUnits
 {

@@ -16,7 +16,7 @@ public:
 	virtual void removeUnit(Unit unit) = 0;
 };
 
-typedef std::tr1::shared_ptr<MicroActionBaseClass> MicroAction;
+typedef std::shared_ptr<MicroActionBaseClass> MicroAction;
 
 class SingleMicroActionBaseClass : public MicroActionBaseClass
 {
@@ -37,7 +37,7 @@ protected:
 	Unit mUnit;
 };
 
-typedef std::tr1::shared_ptr<SingleMicroActionBaseClass> SingleMicroAction;
+typedef std::shared_ptr<SingleMicroActionBaseClass> SingleMicroAction;
 
 class GroupMicroActionBaseClass : public MicroActionBaseClass
 {
@@ -71,4 +71,4 @@ protected:
 	UnitGroup mUnits;
 };
 
-typedef std::tr1::shared_ptr<GroupMicroActionBaseClass> GroupMicroAction;
+typedef std::shared_ptr<GroupMicroActionBaseClass> GroupMicroAction;

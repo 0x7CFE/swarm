@@ -79,14 +79,14 @@ public:
 class PathFinderClass
 {
 public:
-	BuildTilePath CreateTilePath(TilePosition start, TilePosition target, std::tr1::function<bool (TilePosition)> tileTest = DefaultTileTest(), std::tr1::function<int (TilePosition, TilePosition, int)> gFunction = DefaultGValue(), std::tr1::function<int (TilePosition, TilePosition)> hFunction = DefaultHValue(), int maxGValue = 0, bool diaganol = false);
+	BuildTilePath CreateTilePath(TilePosition start, TilePosition target, std::function<bool (TilePosition)> tileTest = DefaultTileTest(), std::function<int (TilePosition, TilePosition, int)> gFunction = DefaultGValue(), std::function<int (TilePosition, TilePosition)> hFunction = DefaultHValue(), int maxGValue = 0, bool diaganol = false);
 	BuildTilePath CreateAdvancedFleePath(TilePosition start, const UnitGroup &enemies, bool stickToRegion = false);
 
 	RegionPath CreateRegionPath(Region start, Region target);
 
 	PositionPath CreateCheapWalkPath(Position start, Position target);
 
-	WalkPositionPath CreateWalkPath(WalkPosition start, WalkPosition target, std::tr1::function<bool (WalkPosition)> tileTest = DefaultWalkTest(), std::tr1::function<int (WalkPosition, WalkPosition, int)> gFunction = DefaultWalkGValue(), std::tr1::function<int (WalkPosition, WalkPosition)> hFunction = DefaultWalkHValue(), int maxGValue = 0, bool diaganol = false);
+	WalkPositionPath CreateWalkPath(WalkPosition start, WalkPosition target, std::function<bool (WalkPosition)> tileTest = DefaultWalkTest(), std::function<int (WalkPosition, WalkPosition, int)> gFunction = DefaultWalkGValue(), std::function<int (WalkPosition, WalkPosition)> hFunction = DefaultWalkHValue(), int maxGValue = 0, bool diaganol = false);
 };
 
 typedef Singleton<PathFinderClass> PathFinder;

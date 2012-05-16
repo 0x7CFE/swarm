@@ -43,4 +43,4 @@ private:
 	ScoutData mData;
 };
 
-typedef std::tr1::shared_ptr<ObserverScoutTask> ObserverScoutTaskPointer;
+typedef std::shared_ptr<ObserverScoutTask> ObserverScoutTaskPointer;

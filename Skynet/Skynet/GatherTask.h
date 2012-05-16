@@ -48,4 +48,4 @@ private:
 	int workerPriority(int workerNumber) const;
 };
 
-typedef std::tr1::shared_ptr<GatherTask> GatherTaskPointer;
+typedef std::shared_ptr<GatherTask> GatherTaskPointer;

@@ -49,4 +49,4 @@ private:
 	Goal mDefenseGoal;
 };
 
-typedef std::tr1::shared_ptr<DefenseSquadTask> DefenseSquadPointer;
+typedef std::shared_ptr<DefenseSquadTask> DefenseSquadPointer;

@@ -113,4 +113,4 @@ private:
 	void removeUnit(Unit unit, Player playerToRemove, BWAPI::UnitType typeToRemove);
 };
 
-typedef std::tr1::shared_ptr<BaseClass> Base;
+typedef std::shared_ptr<BaseClass> Base;

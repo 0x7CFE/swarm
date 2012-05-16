@@ -96,4 +96,4 @@ private:
 	void checkPositions();
 };
 
-typedef std::tr1::shared_ptr<ScoutDataClass> ScoutData;
+typedef std::shared_ptr<ScoutDataClass> ScoutData;
