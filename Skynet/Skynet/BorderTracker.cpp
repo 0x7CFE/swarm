@@ -148,6 +148,7 @@ void BorderTrackerClass::recalculateBorders()
 	std::map<Chokepoint, int> borderChokeTech;
 	for (Chokepoint chokepoint : mMyBorder)
 	{
+		// Find which of the regions is known to us
 		Region startRegion = chokepoint->getRegions().first;
 		if(mMyRegions.count(startRegion) == 0)
 			startRegion = chokepoint->getRegions().second;
@@ -155,7 +156,7 @@ void BorderTrackerClass::recalculateBorders()
 		std::set<Region> visitedRegions;
 		std::set<Region> unvisitedRegions;
 		int controlledAreaTech = 0;
-		unvisitedRegions.insert(startRegion);
+		unvisitedRegions.insert(startRegion); //start region is visited by default
 
 		while(!unvisitedRegions.empty())
 		{
