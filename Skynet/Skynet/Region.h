@@ -2,6 +2,7 @@
 
 #include "Interface.h"
 
+
 class ChokepointClass;
 typedef std::shared_ptr<ChokepointClass> Chokepoint;
 typedef std::weak_ptr<ChokepointClass> WeakChokepoint;
