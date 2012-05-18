@@ -14,6 +14,7 @@ void SquadManagerClass::update()
 {
 	for(std::map<Base, DefenseSquadPointer>::iterator it = mDefenseSquads.begin(); it != mDefenseSquads.end();)
 	{
+		// If there are no enemy threats and no valuable buildings to protect, we do not need a defence squad here
 		if(it->first->getEnemyThreats().empty() || (it->first->isMinedOut() && it->first->getNumberOfTechBuildings() == 0))
 			it->second->cancel();
 
@@ -25,6 +26,7 @@ void SquadManagerClass::update()
 
 	for (Base base : BaseTracker::Instance().getPlayerBases())
 	{
+		// If we have a base with tech and resources but without a defence squad, we should create one
 		if(!base->getEnemyThreats().empty() && (base->getNumberOfTechBuildings() > 0 || (!base->isMinedOut() && base->getResourceDepot())) && mDefenseSquads.count(base) == 0)
 		{
 			DefenseSquadPointer squad = std::static_pointer_cast<DefenseSquadTask>(createSquad(SquadType::DefenseSquad));
@@ -49,6 +51,7 @@ void SquadManagerClass::onChangeBuild()
 			{
 				++numNeeded;
 
+				// Finding the smallest squad
 				int smallest = std::numeric_limits<int>::max();
 				BaseSquadTaskPointer smallestSquad;
 				for (BaseSquadTaskPointer squad : mSquads[it->first])
@@ -61,6 +64,7 @@ void SquadManagerClass::onChangeBuild()
 					}
 				}
 
+				// And erasing it (why?)
 				if(smallestSquad)
 				{
 					smallestSquad->cancel();
@@ -112,7 +116,7 @@ BaseSquadTaskPointer SquadManagerClass::createSquad(SquadType type)
 		task = BaseSquadTaskPointer(new DefenseSquadTask(mCurrentBehaviour));
 		break;
 	case SquadType::ReaverDropSquad:
-		//task = BaseSquadTaskPointer(new ReaverDropSquad());
+		//task = BaseSquadTaskPointer(new ReaverDropSquad()); TODO?
 		break;
 	case SquadType::DarkTemplerSquad:
 		//task = BaseSquadTaskPointer(new DarkTemplerSquad());
