@@ -101,7 +101,7 @@ void Behaviour::createDefaultActions()
 		mMicroActions.push_back(MicroAction(new PsiStormAction(mUnit)));
 
 	if(unitType == BWAPI::UnitTypes::Protoss_Zealot)
-		mMicroActions.push_back(MicroAction(new MineDragAction(mUnit)));
+		mMicroActions.push_back(MicroAction(new MineDragAction(mUnit))); // NOTE could be reused for zerlings too
 
 	mMicroActions.push_back(MicroAction(new BasicUnitAction(mUnit, targetPriorities)));
 	mMicroActions.push_back(MicroAction(new GoalAction(mUnit)));
