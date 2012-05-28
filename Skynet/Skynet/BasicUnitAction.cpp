@@ -175,9 +175,11 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 		}
 
 		bool canAttack = mUnit->canAttackAir() || mUnit->canAttackGround();
+		// Arbiters are more useful as support units for us
 		if(actionUnitType == BWAPI::UnitTypes::Protoss_Arbiter)
 			canAttack = false;
 
+		// If we have at least one spell that could be applied now, we could attack
 		if(!canAttack && actionUnitType.isSpellcaster())
 		{
 			for (BWAPI::TechType tech : mUnit->getType().abilities())
@@ -189,7 +191,7 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 
 		int rangeToStayAt = 0;
 		if(!canAttack)
-			rangeToStayAt = closestUnitRange+32;
+			rangeToStayAt = closestUnitRange+32; // NOTE Is this a code that microes dragoons?
 
 		if(actionUnitType.maxEnergy() > 0 && closestUnit->getType() == BWAPI::UnitTypes::Terran_Science_Vessel)
 			rangeToStayAt = std::max(rangeToStayAt, BWAPI::TechTypes::EMP_Shockwave.getWeapon().maxRange()+32);

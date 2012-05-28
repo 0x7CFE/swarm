@@ -18,33 +18,42 @@ bool PsiStormAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 		if(mUnit->getOrder() == BWAPI::Orders::ArchonWarp)
 			return true;
 
+		// If we're not in the battlefield but in the base, do not try to warp
 		bool warpPriorityLow = squadGoal.getActionType() != ActionType::Attack || squadGoal.getGoalType() != GoalType::Base || mUnit->getPosition().getApproxDistance(squadGoal.getBase()->getCenterLocation()) > 32*20;
 		const int energyToTransformAt = warpPriorityLow ? 48 : 65;
 		if(mUnit->getEnergy() <= energyToTransformAt)
 		{
+			// We need to warp. Find a pair to warp with
 			Unit otherTemp;
 			int closestDistance = std::numeric_limits<int>::max();
 			for (Unit ht : UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Protoss_High_Templar))
 			{
+				// We could not warp with ourselves
 				if(ht == mUnit)
 					continue;
 
+				// This templar is already warping with someone :( Foreveralone.jpg
 				if(ht->getOrder() == BWAPI::Orders::ArchonWarp)
 					continue;
 
+				// Other unit has too much energy and may be useful as is
 				if(ht->getEnergy() > energyToTransformAt)
 					continue;
 
 				int distance = mUnit->getDistance(ht);
 				if(distance < closestDistance)
 				{
+					// Yeah, come on baby, make me feel good!
 					closestDistance = distance;
 					otherTemp = ht;
 				}
 			}
 
 			if(otherTemp)
-			{
+			{	
+				// Not sure what is going on here. Seems that we're checking 
+				// whether our pair has a better candidate than us
+			  
 				Unit otherClosestTemp;
 				int otherClosestDistance = std::numeric_limits<int>::max();
 				for (Unit ht : UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Protoss_High_Templar))
@@ -68,6 +77,8 @@ bool PsiStormAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 
 				if(otherClosestTemp == mUnit)
 				{
+					// If other templar thinks that we're the best, then lets do our dirty thingie ;>
+				  
 					mUnit->useTech(BWAPI::TechTypes::Archon_Warp, otherTemp);
 					otherTemp->useTech(BWAPI::TechTypes::Archon_Warp, mUnit);
 
@@ -86,8 +97,11 @@ bool PsiStormAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 	if(mUnit->getSpellCooldown() > BWAPI::Broodwar->getRemainingLatencyFrames())
 		return false;
 
+	// Checking whether we could cast a storm right now
 	if(BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Psionic_Storm) && mUnit->getEnergy() >= BWAPI::TechTypes::Psionic_Storm.energyUsed())
 	{
+		// Ok, we can do the storm. Who will be the target?
+	  
 		int numTargetting = UnitInformation::Instance().getUnitsTargetting(mUnit).size();
 
 		UnitGroup targetsToChooseFrom;
