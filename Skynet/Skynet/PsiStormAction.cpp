@@ -108,22 +108,26 @@ bool PsiStormAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 
 		for (Unit unit : UnitTracker::Instance().selectAllEnemy())
 		{
+			// Filtering out units that are already dead, not important or already under the storm
 			if(!unit->exists() || unit->isStasised() || unit->isUnderStorm())
 				continue;
 
+			// These units are too fast or too cheap to be the target (not effective)
 			const BWAPI::UnitType &type = unit->getType();
 			if(type.isBuilding() || type == BWAPI::UnitTypes::Terran_Vulture_Spider_Mine || type == BWAPI::UnitTypes::Zerg_Egg || type == BWAPI::UnitTypes::Protoss_Interceptor || type == BWAPI::UnitTypes::Zerg_Larva || type == BWAPI::UnitTypes::Protoss_Scarab)
 				continue;
 
+			// Unit is too far away
 			if(mUnit->getDistance(unit) > BWAPI::TechTypes::Psionic_Storm.getWeapon().maxRange())
 				continue;
 
+			// Ok, seems this unit could be the victim
 			targetsToChooseFrom.insert(unit);
 		}
 
 		UnitGroup targets(targetsToChooseFrom);
 
-		bool castUrgenty = (numTargetting > 2 || (numTargetting > 0 && mUnit->totalHitPointFraction() < 0.6));
+		bool castUrgently = (numTargetting > 2 || (numTargetting > 0 && mUnit->totalHitPointFraction() < 0.6));
 
 		int tries = 0;
 		bool tryAgain = true;
@@ -132,11 +136,14 @@ bool PsiStormAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 			tryAgain = false;
 
 			/* There are 3 targets or there are targets and we need to cast urgently */
-			if(targets.size() >= 3 || (castUrgenty && !targets.empty()))
+			if(targets.size() >= 3 || (castUrgently && !targets.empty()))
 			{
+				// Selecting targets fitting to one shot space
 				targets = targets.getBestFittingToCircle(64, BWAPI::Broodwar->getRemainingLatencyFrames()+BWAPI::Broodwar->getLatencyFrames());
-				if(targets.size() >= 3 || (castUrgenty && !targets.empty()))
+				if(targets.size() >= 3 || (castUrgently && !targets.empty()))
 				{
+					// Ok, some units are really grouped enough to be the victim
+					// Selecting the center of group
 					BWAPI::Position castLocation = targets.getCenter();
 
 					int inStormCount = 0;
@@ -146,7 +153,7 @@ bool PsiStormAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 							++inStormCount;
 
 						if(inStormCount > 1)
-							break;
+							break; 
 					}
 
 					if(inStormCount <= 1)
@@ -185,7 +192,7 @@ bool PsiStormAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 									targets.erase(unit);
 							}
 
-							if(targets.size() >= 3 || (castUrgenty && !targets.empty()))
+							if(targets.size() >= 3 || (castUrgently && !targets.empty()))
 								tryAgain = true;
 						}
 					}
