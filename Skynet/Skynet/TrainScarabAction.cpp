@@ -11,6 +11,7 @@ bool TrainScarabAction::update(const Goal &squadGoal, const UnitGroup &squadUnit
 
 	if(mUnit->getTrainingQueue().size() < 5 && mUnit->getScarabCount() + (int)mUnit->getTrainingQueue().size() < maxAmout)
 	{
+		// NOTE What about rsource reserving?
 		if(BWAPI::Broodwar->self()->minerals() >= BWAPI::UnitTypes::Protoss_Scarab.mineralPrice())
 		{
 			mUnit->train(BWAPI::UnitTypes::Protoss_Scarab);
