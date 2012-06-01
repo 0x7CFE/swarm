@@ -218,7 +218,9 @@ struct BuildOrderIDDef
 		FourPool,
 		Test,
 		BGHProtoss,
-		T3Protoss
+		T3Protoss,
+		ZvPDefault,
+		LairIntoSpiral
 	};
 };
 typedef SafeEnum<BuildOrderIDDef> BuildOrderID;
