@@ -604,7 +604,7 @@ void TerrainAnaysisClass::createBases()
 	//Group them into clusters
 	std::vector<UnitGroup> resourceClusters = UnitHelper::getClusters(resources, 260, 3);
 
-	//TODO: create the bases on the fly rather then collect information then create
+	//TODO: create the bases on the fly rather than collect information then create
 	std::set<TilePosition> basesToCreate;
 	std::map<TilePosition, UnitGroup> baseToCreateToMineral;
 	std::map<TilePosition, bool> baseIsRegionBase;

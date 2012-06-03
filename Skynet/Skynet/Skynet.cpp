@@ -46,13 +46,13 @@ Skynet::Skynet()
 
 void Skynet::onStart()
 {
-	BWAPI::Broodwar->sendText("Skynet 2.0 Operational");
+	BWAPI::Broodwar->sendText("Skynet 2.0Z+ Operational");
 
 	BWAPI::Broodwar->setLatCom(false);
 	BWAPI::Broodwar->setCommandOptimizationLevel(1);
 
-	if(BWAPI::Broodwar->self()->getRace() != BWAPI::Races::Protoss)
-		BWAPI::Broodwar->sendText("Skynet is a Protoss only bot");
+	//if(BWAPI::Broodwar->self()->getRace() != BWAPI::Races::Protoss)
+	//	BWAPI::Broodwar->sendText("Skynet is a Protoss only bot");
 }
 
 void Skynet::onEnd(bool isWinner)

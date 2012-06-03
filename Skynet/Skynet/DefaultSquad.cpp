@@ -342,7 +342,12 @@ void DefaultSquadTask::updateRequirements()
 		{
 			RequirementGroup req;
 
-			req.addUnitFilterRequirement(20, Requirement::maxTime, UnitFilter(BWAPI::UnitTypes::Protoss_Observer) && UnitFilter(UnitFilterFlags::IsComplete));
+			if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Protoss)
+			    req.addUnitFilterRequirement(20, Requirement::maxTime, UnitFilter(BWAPI::UnitTypes::Protoss_Observer) && UnitFilter(UnitFilterFlags::IsComplete));
+			
+			// FIXME Currently it grabs all available overlords not letting them to scout
+//			else if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+//			    req.addUnitFilterRequirement(20, Requirement::maxTime, UnitFilter(BWAPI::UnitTypes::Zerg_Overlord) && UnitFilter(UnitFilterFlags::IsComplete));
 
 			addRequirement(req);
 		}

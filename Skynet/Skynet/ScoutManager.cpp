@@ -129,6 +129,7 @@ void ScoutManagerClass::update()
 
 	updateObserverScouts();
 	updateWorkerScouts();
+	updateObserverScouts();
 
 // 	for (Base base : BaseTracker::Instance().getAllBases())
 // 	{
@@ -198,6 +199,32 @@ void ScoutManagerClass::updateObserverScouts()
 	}
 }
 
+void ScoutManagerClass::updateOverlordScouts()
+{
+	for(std::set<Ov>::iterator it = mOverlordScouts.begin(); it != mOverlordScouts.end();)
+	{
+		if((*it)->hasEnded())
+			mOverlordScouts.erase(it++);
+		else
+			++it;
+	}
+
+	unsigned int curreentOverlords = UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Overlord).size();
+	unsigned int maxOverlords = curreentOverlords > 1 ? curreentOverlords - 1 : 0;
+	//BWAPI::Broodwar->drawTextScreen(5, 35, "Max Observer Scouts : %u", maxObservers);
+	//BWAPI::Broodwar->drawTextScreen(5, 45, "Current Observer Scouts : %u", mObserverScouts.size());
+
+	if(maxOverlords > mOverlordScouts.size())
+	{
+		ScoutData data = getScoutData(ScoutUnitType::Overlord);
+
+		OverlordScoutTaskPointer task = OverlordScoutTaskPointer(new OverlordScoutTask(TaskType::Scout, data));
+		mOverlordScouts.insert(task);
+
+		TaskManager::Instance().addTask(task);
+	}
+}
+
 void ScoutManagerClass::updateLastScoutType(ScoutData data, ScoutType type)
 {
 	mCurrentScoutType[data->getBase()] = ScoutType::None;
@@ -223,7 +250,7 @@ ScoutData ScoutManagerClass::getScoutData(ScoutUnitType unit)
 			else if(mLastScoutType[data->getBase()] == ScoutType::FailedWithGroundLow && mLastScoutTime[data->getBase()] + 3500 > BWAPI::Broodwar->getFrameCount())
 				continue;
 		}
-		else if(unit == ScoutUnitType::Observer)
+		else if(unit == ScoutUnitType::Observer || unit == ScoutUnitType::Overlord)
 		{
 			if(mLastScoutType[data->getBase()] == ScoutType::FailedWithAir)
 				continue;

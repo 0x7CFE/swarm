@@ -100,9 +100,17 @@ void Behaviour::createDefaultActions()
 	if(unitType == BWAPI::UnitTypes::Protoss_High_Templar)
 		mMicroActions.push_back(MicroAction(new PsiStormAction(mUnit)));
 
-	if(unitType == BWAPI::UnitTypes::Protoss_Zealot)
-		mMicroActions.push_back(MicroAction(new MineDragAction(mUnit))); // NOTE could be reused for zerlings too
+	if(unitType == BWAPI::UnitTypes::Protoss_Zealot || unitType == BWAPI::UnitTypes::Zerg_Zergling)
+		mMicroActions.push_back(MicroAction(new MineDragAction(mUnit)));
 
 	mMicroActions.push_back(MicroAction(new BasicUnitAction(mUnit, targetPriorities)));
 	mMicroActions.push_back(MicroAction(new GoalAction(mUnit)));
+	
+	
+	// Zerg part
+	if (unitType == BWAPI::UnitTypes::Zerg_Zergling)
+	{
+	    firstTargets.insert(BWAPI::UnitTypes::Protoss_Dragoon);
+	    firstTargets.insert(BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode);
+	}
 }
