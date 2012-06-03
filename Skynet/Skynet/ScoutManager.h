@@ -7,6 +7,7 @@
 #include "Base.h"
 #include "WorkerScoutTask.h"
 #include "ObserverScoutTask.h"
+#include "OverlordScoutTask.h"
 
 class ScoutManagerClass
 {
@@ -18,6 +19,7 @@ public:
 
 	void updateWorkerScouts();
 	void updateObserverScouts();
+	void updateOverlordScouts();
 
 	void updateLastScoutType(ScoutData data, ScoutType type);
 
@@ -37,6 +39,7 @@ private:
 
 	std::set<WorkerScoutTaskPointer> mWorkerScouts;
 	std::set<ObserverScoutTaskPointer> mObserverScouts;
+	std::set<OverlordScoutTaskPointer> mOverlordScouts;
 };
 
 typedef Singleton<ScoutManagerClass> ScoutManager;

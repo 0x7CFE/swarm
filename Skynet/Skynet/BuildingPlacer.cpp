@@ -34,6 +34,7 @@ void BuildingPlacerClass::calculateReservations()
 				mPermanentReserved[TilePosition(x, y)] = centerType;
 
 		// if its zerg, also reserve the area the larva hang out
+		// FIXME additional hatcheries may be placed incorrectly and too close to resources		
 		if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
 		{
 			for(int x = base->getCenterBuildLocation().x() - 1; x < base->getCenterBuildLocation().x()+centerType.tileWidth()+1; ++x)
@@ -107,18 +108,18 @@ void BuildingPlacerClass::update()
 			++it;
 	}
 
-// 	for(std::map<TilePosition, BWAPI::UnitType>::iterator it = mPermanentReserved.begin(); it != mPermanentReserved.end(); ++it)
-// 	{
-// 		BWAPI::Broodwar->drawBox(BWAPI::CoordinateType::Map, it->first.x() * 32, it->first.y() * 32, it->first.x() * 32 + 32, it->first.y() * 32 + 32, BWAPI::Colors::Red);
-// 	}
-// 	for(std::map<TilePosition, int>::iterator it = mResourceReserved.begin(); it != mResourceReserved.end(); ++it)
-// 	{
-// 		BWAPI::Broodwar->drawCircle(BWAPI::CoordinateType::Map, it->first.x()*32+16, it->first.y()*32+16, 16, BWAPI::Colors::Blue);
-// 	}
-// 	for(std::map<TilePosition, ReservedLocation>::iterator it = mReservedTiles.begin(); it != mReservedTiles.end(); ++it)
-// 	{
-// 		BWAPI::Broodwar->drawBox(BWAPI::CoordinateType::Map, it->first.x() * 32, it->first.y() * 32, it->first.x() * 32 + 32, it->first.y() * 32 + 32, BWAPI::Colors::Red);
-// 	}
+	for(std::map<TilePosition, BWAPI::UnitType>::iterator it = mPermanentReserved.begin(); it != mPermanentReserved.end(); ++it)
+	{
+		BWAPI::Broodwar->drawBox(BWAPI::CoordinateType::Map, it->first.x() * 32, it->first.y() * 32, it->first.x() * 32 + 32, it->first.y() * 32 + 32, BWAPI::Colors::Red);
+	}
+	for(std::map<TilePosition, int>::iterator it = mResourceReserved.begin(); it != mResourceReserved.end(); ++it)
+	{
+		BWAPI::Broodwar->drawCircle(BWAPI::CoordinateType::Map, it->first.x()*32+16, it->first.y()*32+16, 16, BWAPI::Colors::Blue);
+	}
+	for(std::map<TilePosition, ReservedLocation>::iterator it = mReservedTiles.begin(); it != mReservedTiles.end(); ++it)
+	{
+		BWAPI::Broodwar->drawBox(BWAPI::CoordinateType::Map, it->first.x() * 32, it->first.y() * 32, it->first.x() * 32 + 32, it->first.y() * 32 + 32, BWAPI::Colors::Red);
+	}
 }
 
 void BuildingPlacerClass::onDestroy(Unit unit)
@@ -202,6 +203,71 @@ bool BuildingPlacerClass::isResourceReserved(int x, int y) const
 	return isResourceReserved(TilePosition(x, y));
 }
 
+
+class ChokeLocationCompare
+{
+public:
+	ChokeLocationCompare(Base base, BWAPI::UnitType type, int minDistance = 0, int maxDistance = std::numeric_limits<int>::max()) 
+	      : mBase(base), mType(type), mminDistance(minDistance), mmaxDistance(maxDistance)
+	{
+	      // Storing chokepoint tiles for fast access
+	      mRegion = base->getRegion();
+	      chokes = mRegion->getChokepoints();
+	      std::set<Chokepoint> cp = mRegion->getChokepoints();
+	      
+	}
+
+	int getClosestChokeDistance(TilePosition location)
+	{
+	      double minDistance = std::numeric_limits<double>::max();
+	      for (Chokepoint choke : chokes)
+	      {
+		    double distance = location.getDistance(choke->getCenter());
+		    if ( distance < minDistance )
+			minDistance = distance;
+	      }
+	      
+	      return ceil(minDistance);
+	}
+	
+	bool operator() (TilePosition location) const
+	{
+		// Checking whether we're still in our base
+		if (BaseTracker::Instance().getBase(location) != mBase)
+			return false;
+
+		// Location should be in our region
+		if (TerrainAnaysis::Instance().getRegion(location) != mRegion)
+			return false;
+		// If we could not build here we even no need to check
+		if (BuildingPlacer::Instance().isTileBuildable(location, mType));
+		        return false;
+		
+		std::pair<int, Chokepoint> pair = getClosestChokeDistance(location); 
+		if (pair.first >= mminDistance && pair.first < mmaxDistance)
+			return BuildingPlacer::Instance().isLocationNonBlocking(location, mType);
+	}
+
+private:
+	int mminDistance;
+	int mmaxDistance;
+	Base mBase;
+	Region mRegion;
+	BWAPI::UnitType mType;
+	std::set<Chokepoint> chokes;
+};
+
+TilePosition BuildingPlacerClass::getChokeBuildableLocation(Base base, BWAPI::UnitType type) const
+{
+	TilePosition result = BWAPI::TilePositions::None;
+	if (type.isResourceDepot())
+	    result = MapHelper::spiralSearch(base->getCenterBuildLocation(), ChokeLocationCompare(base, type, 12));
+	else 
+	    result = MapHelper::spiralSearch(base->getCenterBuildLocation(), ChokeLocationCompare(base, type, 0, 10));
+	return result;
+}
+
+
 std::pair<TilePosition, Base> BuildingPlacerClass::buildingLocationToTile(BuildingLocation position, BWAPI::UnitType type) const
 {
 	if(type.isRefinery())
@@ -223,6 +289,16 @@ std::pair<TilePosition, Base> BuildingPlacerClass::buildingLocationToTile(Buildi
 	{
 	case BuildingLocation::BaseChoke:
 		{
+			// Here we need to find the builable location close to choke point
+			for (Base base : baseToBuildAtOrder(type))
+			{
+				TilePosition pos = getChokeBuildableLocation();
+				//TilePosition pos = getBuildLocation(base, type); // TODO : flags of some sort so certain units can be build in minerals etc
+				if(pos != BWAPI::TilePositions::None)
+					return std::make_pair(pos, base);
+			}
+			
+		  
 			TilePosition pos = WallTracker::Instance().getWallPosition(type);
 			if(pos != BWAPI::TilePositions::None)
 				return std::make_pair(pos, BaseTracker::Instance().getBase(pos));
@@ -293,7 +369,7 @@ public:
 
 	bool operator()(TilePosition &location)
 	{
-		return BuildingPlacer::Instance().isTileWalkable(location, mIgnoreReservations) && TerrainAnaysis::Instance().getRegion(location) == mRegion;
+	      return BuildingPlacer::Instance().isTileWalkable(location, mIgnoreReservations) && TerrainAnaysis::Instance().getRegion(location) == mRegion;
 	}
 
 private:
@@ -469,10 +545,11 @@ bool BuildingPlacerClass::isLocationBuildable(TilePosition position, BWAPI::Unit
 		{
 			if(geyser->accessibility() != AccessType::Dead)
 			{
-				if (geyser->getTilePosition().x() > position.x() - 7 &&
-					geyser->getTilePosition().y() > position.y() - 5 &&
-					geyser->getTilePosition().x() < position.x() + 7 &&
-					geyser->getTilePosition().y() < position.y() + 6)
+				if (geyser->getTilePosition().x() > position.x() - 8 &&                //7
+					geyser->getTilePosition().y() > position.y() - 6 &&            //5   
+					geyser->getTilePosition().x() < position.x() + 6 &&            //7
+					geyser->getTilePosition().y() < position.y() + 5)              //6
+				  
 				{
 					return false;
 				}

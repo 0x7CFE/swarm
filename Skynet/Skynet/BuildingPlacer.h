@@ -49,6 +49,7 @@ public:
 	std::pair<TilePosition, Base> getlandingLocation(Unit unit) const;
 
 	TilePosition getBuildLocation(Base base, BWAPI::UnitType type) const;
+	TilePosition getChokeBuildableLocation(Base base, BWAPI::UnitType type);
 
 	bool isLocationNonBlocking(TilePosition position, BWAPI::UnitType type, bool ignoreReservations = false) const;
 	bool isLocationBuildable(TilePosition position, BWAPI::UnitType type, bool ignoreReservations = false) const;

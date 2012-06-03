@@ -92,8 +92,16 @@ void ResourceManagerClass::update()
 
 	neededWorkers = std::min(neededWorkers, 50u);
 	neededWorkers -= std::min(numWorkers, neededWorkers);
-	neededWorkers = std::min(neededWorkers, UnitTracker::Instance().selectAllUnits(BWAPI::Broodwar->self()->getRace().getWorker().whatBuilds().first).size() + 1);
-
+	
+	if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+	{
+	    int availableLarva = UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Larva).size();
+	    // Reserving at most 30% of larva for workers
+	    neededWorkers = std::min(neededWorkers, availableLarva / 3);
+	}
+	else 
+	    neededWorkers = std::min(neededWorkers, UnitTracker::Instance().selectAllUnits(BWAPI::Broodwar->self()->getRace().getWorker().whatBuilds().first).size() + 1);
+	
 	mTaskPump.changeTargetQuantity(neededWorkers);
 	mTaskPump.update();
 

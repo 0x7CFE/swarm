@@ -47,7 +47,8 @@ struct OrderDef
 		CanRemoveSquads,
 		ExpansionManager,
 		MacroProductionFacilities,
-		MacroCanTech
+		MacroCanTech,
+		BaseDefenseManager
 	};
 };
 typedef SafeEnum<OrderDef> Order;
@@ -220,6 +221,9 @@ struct BuildOrderIDDef
 		BGHProtoss,
 		T3Protoss,
 		ZvPDefault,
+		HydraPreExpand,
+		ZvPMiddle,
+		ZvPEnd,
 		LairIntoSpiral
 	};
 };
