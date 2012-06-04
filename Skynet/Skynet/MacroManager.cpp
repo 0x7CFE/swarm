@@ -516,6 +516,7 @@ std::set<BWAPI::UnitType> MacroManagerClass::getNeededUnits(BWAPI::UpgradeType t
 	if(!isPlanningUnit(type.whatUpgrades()))
 		neededUnits.insert(type.whatUpgrades());
 
+	// TODO Zerg
 	if(level > 1)
 	{
 		if((type == BWAPI::UpgradeTypes::Protoss_Ground_Weapons || type == BWAPI::UpgradeTypes::Protoss_Ground_Armor) && !isPlanningUnit(BWAPI::UnitTypes::Protoss_Templar_Archives))

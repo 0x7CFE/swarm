@@ -61,34 +61,37 @@ void ExpansionManagerClass::updateRefineries()
 	}
 }
 
-void ExpansionManagerClass::updateDefense()
+
+void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neededPerBase)
 {
-	if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
-		return;
-
-	BWAPI::UnitType defenseType = BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Protoss ? BWAPI::UnitTypes::Protoss_Photon_Cannon : BWAPI::UnitTypes::Terran_Missile_Turret;
-
 	if(!MacroManager::Instance().hasRequirements(defenseType))
 		return;
 
+	const BWAPI::Race& myRace = BWAPI::Broodwar->self()->getRace();
+	
+	// Base support buildings are needed when there are many (distant) bases
 	std::set<Base> myBases = BaseTracker::Instance().getActiveBases(true);
 	if(myBases.size() >= 2)
 	{
+		// FIXME In case of Zerg defensesNeeded should be counted
+		//       depending on the base chokepoint count
 		int defensesNeeded = 0;
-		int neededPerBase = PlayerTracker::Instance().isEnemyRace(BWAPI::Races::Zerg) ? 4 : 2;
 
 		for (Base base : myBases)
 		{
 			if(base->getMinerals().empty())
-				continue;
+				continue; // Nothing to defend?
 
 			bool hasPylon = defenseType.requiresPsi() ? false : true;
 			int thisCount = 0;
+			
+			// Searching for defenses that were built already
 			for (Unit building : base->getBuildings())
 			{
 				if(building->getType() == defenseType)
-					++thisCount;
+					++thisCount; // Ok
 
+				// For Protoss only
 				if(building->getType() == BWAPI::UnitTypes::Protoss_Pylon)
 				{
 					if(building->isCompleted())
@@ -96,15 +99,19 @@ void ExpansionManagerClass::updateDefense()
 				}
 			}
 
-			if(hasPylon)
+			if ( (myRace != BWAPI::Races::Protoss) || hasPylon)
 			{
 				defensesNeeded += neededPerBase;
 				defensesNeeded -= std::min(thisCount, neededPerBase);
 			}
-			else if(BWAPI::Broodwar->self()->supplyTotal() >= 380 && (!mPylon || mPylon->hasEnded()))
-				mPylon = TaskManager::Instance().build(BWAPI::UnitTypes::Protoss_Pylon, TaskType::Defense);
+			else 
+			    if( (myRace == BWAPI::Races::Protoss) 
+				&& BWAPI::Broodwar->self()->supplyTotal() >= 380 
+				&& (!mPylon || mPylon->hasEnded()))
+					mPylon = TaskManager::Instance().build(BWAPI::UnitTypes::Protoss_Pylon, TaskType::Defense);
 		}
 
+		// Removing completed tasks that were ordered previously
 		for(std::list<TaskPointer>::iterator it = mDefenseTasks.begin(); it != mDefenseTasks.end();)
 		{
 			if((*it)->hasEnded())
@@ -117,16 +124,20 @@ void ExpansionManagerClass::updateDefense()
 			}
 		}
 
+		// Looking whether we need to build some defense structures
 		if(defensesNeeded > 0)
 		{
 			for(int i = 0; i < defensesNeeded; ++i)
 			{
 				LOGMESSAGE(String_Builder() << "Built Defense.");
-				mDefenseTasks.push_front(TaskManager::Instance().build(defenseType, TaskType::Defense));
+				
+				// TODO BuildingLocation::BaseChoke for Zerg
+				mDefenseTasks.push_front(TaskManager::Instance().build(defenseType, TaskType::Defense)); 
 			}
 		}
-		else if(defensesNeeded < 0)
+		else if(defensesNeeded < 0) 
 		{
+			// Oops, seems that there are too many defense structures already
 			for(int i = 0; i < defensesNeeded; ++i)
 			{
 				std::list<TaskPointer>::iterator begin = mDefenseTasks.begin();
@@ -135,6 +146,24 @@ void ExpansionManagerClass::updateDefense()
 				mDefenseTasks.erase(begin);
 			}
 		}
+	}
+}
+
+void ExpansionManagerClass::updateDefense()
+{
+	int neededPerBase = PlayerTracker::Instance().isEnemyRace(BWAPI::Races::Zerg) ? 4 : 2;
+	
+	switch (BWAPI::Broodwar->self()->getRace().getID())
+	{
+	    case BWAPI::Races::Protoss.getID(): updateDefense(BWAPI::UnitTypes::Protoss_Photon_Cannon, neededPerBase); break;
+	    case BWAPI::Races::Terran.getID(): updateDefense(BWAPI::UnitTypes::Terran_Missile_Turret, neededPerBase); break;
+	    
+	    case BWAPI::Races::Zerg.getID(): 
+		// FIXME Count of defense structures should be calculated
+		//       depending on the amount of base' chokepoints
+		updateDefense(BWAPI::UnitTypes::Zerg_Sunken_Colony, 3);
+		updateDefense(BWAPI::UnitTypes::Zerg_Spore_Colony, 1);
+		break;
 	}
 }
 
