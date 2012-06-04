@@ -97,6 +97,7 @@ void ResourceManagerClass::update()
 	{
 	    int availableLarva = UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Larva).size();
 	    // Reserving at most 30% of larva for workers
+	    // TODO Detect if there are no other build requests than the workers and engage all available larva then
 	    neededWorkers = std::min(neededWorkers, availableLarva / 3);
 	}
 	else 

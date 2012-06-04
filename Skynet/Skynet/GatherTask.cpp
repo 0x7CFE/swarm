@@ -142,7 +142,16 @@ void GatherTask::updateRequirements()
 	if(resourceDepot)
 	{
 		int completeTime = 0;
-		if(!resourceDepot->isCompleted())
+		
+		// Zerg resource depots may mutate during game progress (Hatchery -> Lair -> Hive)
+		// Still, this does not interrupt the mining process
+		if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg) 
+		{
+		    if (!resourceDepot->isCompleted() && resourceDepot->getType() == BWAPI::UnitTypes::Zerg_Hatchery)
+			completeTime = resourceDepot->getCompletedTime();
+		    // Lair and Hive does not matter, so completeTime remains 0
+		} else 
+		    if(!resourceDepot->isCompleted())
 			completeTime = resourceDepot->getCompletedTime();
 
 		if(mResource->getType().isRefinery() && !mResource->isCompleted())

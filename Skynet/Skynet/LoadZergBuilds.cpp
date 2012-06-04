@@ -24,6 +24,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	ID_1 = zvpDefault.addItem(Zerg_Spawning_Pool, 1, TaskType::Army);
 	zvpDefault.addItem(Zerg_Drone, CB(ID_1, CallBackType::onStarted), 3);
 	ID_2 = zvpDefault.addItem(Zerg_Zergling, 3, TaskType::Army);
+	       zvpDefault.addOrder(Order::Scout, CB(ID_2, CallBackType::onStarted)); // scouting until choke gets blocked
 	ID_2 = zvpDefault.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched), 3);
 	
 // 	ID_1 = zvpDefault.addItem(Zerg_Creep_Colony, CB(ID_2, CallBackType::onCompleted), 1, BuildingLocation::Base); // Need to be near the choke
@@ -48,15 +49,15 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	ID_1 = hydraPreExpand.addItem(Zerg_Extractor, 1, TaskType::Highest);
 	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched));
 	       hydraPreExpand.addOrder(Order::RefineryManager, CB(ID_1, CallBackType::onDispatched));
-	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched), 3);
+	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched), 2);
 	
 	       
 //	       hydraPreExpand.addItem(Metabolic_Boost, 1, CB(ID_1, CallBackType::onCompleted));
 	
 	ID_1 = hydraPreExpand.addItem(Zerg_Hydralisk_Den, 1, TaskType::Highest);//CB(ID_1, CallBackType::onCompleted));
-	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onStarted), 4);
+	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onStarted), 2);
 	
-	ID_2 = hydraPreExpand.addItem(Zerg_Zergling, 8, BuildingLocation::Base, TaskType::Highest);
+	ID_2 = hydraPreExpand.addItem(Zerg_Zergling, 10, BuildingLocation::Base, TaskType::Highest);
 	ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest,  CB(ID_1, CallBackType::onDispatched), 12);
 	       
 	       hydraPreExpand.addItem(Grooved_Spines, 1, CB(ID_1, CallBackType::onDispatched));
@@ -77,7 +78,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	
 	hydraPreExpand.addSquad(SquadType::DefaultSquad);
 	
-	hydraPreExpand.addOrder(Order::Scout, CB(ID_2, CallBackType::onDispatched));
+	//hydraPreExpand.addOrder(Order::Scout, CB(ID_2, CallBackType::onDispatched));
 	hydraPreExpand.addOrder(Order::ExpansionManager, CB(ID_2, CallBackType::onDispatched)); // FIXME need to expand only when base is secured
 	hydraPreExpand.addOrder(Order::SupplyManager);
 	hydraPreExpand.addOrder(Order::TrainWorkers, CB(ID_1, CallBackType::onDispatched));
@@ -97,17 +98,23 @@ void BuildOrderManagerClass::LoadZergBuilds()
 //	zvpMiddle.addItem(Zerg_Defiler_Mound, 1);
 	
 	zvpMiddle.addSquad(SquadType::DefaultSquad);
-	zvpMiddle.addSquad(SquadType::DefenseSquad);
+//	zvpMiddle.addSquad(SquadType::DefenseSquad);
+	
+	ID_1 =	zvpMiddle.addItem(Grooved_Spines, TaskType::MacroUrgent);
+	ID_1 =	zvpMiddle.addItem(Muscular_Augments, TaskType::MacroUrgent, CB(ID_1, CallBackType::onCompleted));
+	ID_1 =	zvpMiddle.addItem(Metabolic_Boost, TaskType::MacroUrgent, CB(ID_1, CallBackType::onCompleted));
 	
 	zvpMiddle.addProduce(Zerg_Zergling, 14);
 	zvpMiddle.addProduce(Zerg_Hydralisk, 14);
+	zvpMiddle.addProduce(Zerg_Mutalisk, 1);
 	
-	zvpMiddle.addProduce(Zerg_Queen, 1, 80, Condition(ConditionTest::myPlannedUnitTotalGreaterEqualThan, Zerg_Queens_Nest, 1));
-	zvpMiddle.addProduce(Zerg_Defiler, 1, 80, Condition(ConditionTest::isResearching, Plague));
-	zvpMiddle.addProduce(Zerg_Lurker, 1, 60, Condition(ConditionTest::isResearching, Lurker_Aspect));
-	zvpMiddle.addProduce(Zerg_Scourge, 1, 80, Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Corsair, 5) || Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Shuttle, 1));
+	zvpMiddle.addProduce(Zerg_Queen, 1, 100, Condition(ConditionTest::isResearching, Ensnare)); 
+	//Condition(ConditionTest::myPlannedUnitTotalGreaterEqualThan, Zerg_Queens_Nest, 1));
+	zvpMiddle.addProduce(Zerg_Defiler, 1, 100, Condition(ConditionTest::isResearching, Plague));
+//	zvpMiddle.addProduce(Zerg_Lurker, 1, 100, Condition(ConditionTest::isResearching, Lurker_Aspect));
+	zvpMiddle.addProduce(Zerg_Scourge, 1, 100, Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Corsair, 5) || Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Shuttle, 1));
 	
-	zvpMiddle.addOrder(Order::Scout);
+	//zvpMiddle.addOrder(Order::Scout); // TODO Condition to start after first expansion
 	zvpMiddle.addOrder(Order::ExpansionManager);
 	zvpMiddle.addOrder(Order::SupplyManager);
 	zvpMiddle.addOrder(Order::TrainWorkers);

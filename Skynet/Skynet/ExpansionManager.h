@@ -19,6 +19,7 @@ private:
 	TaskPointer mPylon;
 	std::list<TaskPointer> mDefenseTasks;
 	void updateDefense();
+	void updateDefense(BWAPI::UnitType defenseType, int neededPerBase);
 
 	std::list<TaskPointer> mExpandTasks;
 	void updateExpands();
