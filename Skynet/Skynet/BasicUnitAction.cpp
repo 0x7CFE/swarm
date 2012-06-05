@@ -16,6 +16,8 @@ void stayAtRange(Unit unit, Position targetPositon, int maxRange, int currentRan
 	direction *= float(maxRange - currentRange);
 	direction += Vector(current);
 
+	if (unit->isBurrowed())
+	    unit->unburrow();
 	unit->move(direction);
 }
 
@@ -150,9 +152,13 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 	if(isTargetOfThreat)
 	{
 		if(currentTargetUnit)
+		{
+			if (mUnit->isBurrowed())
+			      mUnit->unburrow();
 			mUnit->attack(currentTargetUnit);
-		else
+		} else
 			mUnit->stop();
+			// TODO Could we burrow here?
 		return true;
 	}
 	
@@ -209,11 +215,17 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 
 	if(goalBetterThanCurrent)
 	{
+		// TODO Check for Lurker
+		if (mUnit->isBurrowed())
+		      mUnit->unburrow();
 		mUnit->attack(goalTargetUnit);
 		return true;
 	}
 	else if(canAttackCurrentTarget)
 	{
+		// TODO Check for Lurker
+		if (mUnit->isBurrowed())
+		      mUnit->unburrow();
 		mUnit->attack(currentTargetUnit);
 		return true;
 	}
@@ -242,6 +254,9 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 
 	if(goalTargetUnit && goalTargetPriority < currentTargetPriority)
 	{
+		if (mUnit->isBurrowed())
+		      mUnit->unburrow();
+		
 		mUnit->attack(goalTargetUnit);
 		return true;
 	}
@@ -252,6 +267,9 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 		{
 			if(!isCurrentTargetImportant && mUnit->getDistance(currentTargetUnit) > 5)
 			{
+				if (mUnit->isBurrowed())
+				      mUnit->unburrow();
+					
 				mUnit->move(currentTargetUnit->getPosition());
 				return true;
 			}
@@ -260,15 +278,35 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 
 	if(currentTargetUnit)
 	{
+		// TODO Check for Lurker
+		if (mUnit->isBurrowed())
+		      mUnit->unburrow();
+			
 		mUnit->attack(currentTargetUnit);
 		return true;
 	}
 
 	if(closestUnit && mUnit->canAttack(closestUnit))
 	{
+		// TODO Check for Lurker
+		if (mUnit->isBurrowed())
+		      mUnit->unburrow();
+		
 		mUnit->attack(closestUnit);
+		
 		return true;
 	}
-
-	return false;
+	
+	// nothing to do? just burrow and relax :D
+	// TODO Take advantage of isIdle()
+	if ((BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg) && 
+	    BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing) && 
+	    mUnit->isIdle() &&
+	    mUnit->getType().isBurrowable() 
+	    /* && !mUnit->getType().isWorker()*/ )
+	{
+		mUnit->burrow(); 
+		return true;
+	} else
+		return false;
 }

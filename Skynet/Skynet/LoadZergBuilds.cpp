@@ -59,6 +59,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	
 	ID_2 = hydraPreExpand.addItem(Zerg_Zergling, 10, BuildingLocation::Base, TaskType::Highest);
 	ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest,  CB(ID_1, CallBackType::onDispatched), 12);
+	ID_2 = hydraPreExpand.addItem(Burrowing, TaskType::Highest, CB(ID_2, CallBackType::onCompleted));
 	       
 	       hydraPreExpand.addItem(Grooved_Spines, 1, CB(ID_1, CallBackType::onDispatched));
 //	       hydraPreExpand.addItem(Muscular_Augments, 1, CB(ID_1, CallBackType::onCompleted));
@@ -108,11 +109,11 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	zvpMiddle.addProduce(Zerg_Hydralisk, 14);
 	zvpMiddle.addProduce(Zerg_Mutalisk, 1);
 	
-	zvpMiddle.addProduce(Zerg_Queen, 1, 100, Condition(ConditionTest::isResearching, Ensnare)); 
+	//zvpMiddle.addProduce(Zerg_Queen, 1, 100, Condition(ConditionTest::isResearching, Ensnare)); 
 	//Condition(ConditionTest::myPlannedUnitTotalGreaterEqualThan, Zerg_Queens_Nest, 1));
-	zvpMiddle.addProduce(Zerg_Defiler, 1, 100, Condition(ConditionTest::isResearching, Plague));
+	//zvpMiddle.addProduce(Zerg_Defiler, 1, 100, Condition(ConditionTest::isResearching, Plague));
 //	zvpMiddle.addProduce(Zerg_Lurker, 1, 100, Condition(ConditionTest::isResearching, Lurker_Aspect));
-	zvpMiddle.addProduce(Zerg_Scourge, 1, 100, Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Corsair, 5) || Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Shuttle, 1));
+	//zvpMiddle.addProduce(Zerg_Scourge, 1, 100, Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Corsair, 5) || Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Shuttle, 1));
 	
 	//zvpMiddle.addOrder(Order::Scout); // TODO Condition to start after first expansion
 	zvpMiddle.addOrder(Order::ExpansionManager);

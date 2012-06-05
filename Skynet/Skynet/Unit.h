@@ -3,6 +3,7 @@
 #include "Interface.h"
 
 #include "TypeSafeEnum.h"
+#include <boost/concept_check.hpp>
 
 struct AccessTypeDef
 {
@@ -143,6 +144,7 @@ public:
 	bool isHealing();
 	bool isBeingHealed();
 	bool isBeingRepaired();
+	bool isIdle();
 
 	int getEnergy();
 	std::list<BWAPI::UnitType> getTrainingQueue();
@@ -178,6 +180,10 @@ public:
 	void attack(Position target, int accuracy = 8);
 	void useTech(BWAPI::TechType tech, Position target);
 	void useTech(BWAPI::TechType tech, Unit target);
+	
+	//Zerg specific
+	void burrow();
+	void unburrow();
 
 	//Prediction
 	void promote(BWAPI::Unit* unit);
