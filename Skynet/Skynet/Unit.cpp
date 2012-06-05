@@ -538,6 +538,8 @@ void UnitClass::build(TilePosition target, BWAPI::UnitType type)
 		const Position targetPosition(target.x()*32+type.tileWidth()*16, target.y()*32+type.tileHeight()*16);
 		if(getDistance(type, targetPosition) > 48 || !MapHelper::isAllVisible(target, type))
 		{
+			if (isBurrowed())
+			      unburrow();
 			move(targetPosition, 0);
 			return;
 		}
@@ -557,7 +559,11 @@ void UnitClass::build(TilePosition target, BWAPI::UnitType type)
 		if(mUnit->build(target, type))
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
 		else
+		{
+			if (isBurrowed())
+			      unburrow();
 			move(targetPosition, 0);
+		}
 	}
 }
 
@@ -678,6 +684,9 @@ void UnitClass::move(Position target, int accuracy)
 {
 	if(exists())
 	{
+		if (isBurrowed())
+		      unburrow();
+		
 		if(mUnit->getOrder() == BWAPI::Orders::Move)
 		{
 			if(mUnit->getOrderTargetPosition().getApproxDistance(target) <= accuracy)
@@ -701,8 +710,13 @@ void UnitClass::attack(Unit unit)
 {
 	if(exists() && unit)
 	{
+		if (isBurrowed())
+		      unburrow();
+		
 		if(!unit->exists())
 		{
+			if (isBurrowed())
+			      unburrow();
 			move(unit->getPosition());
 			return;
 		}
@@ -728,6 +742,9 @@ void UnitClass::attack(Position target, int accuracy)
 {
 	if(exists())
 	{
+		if (isBurrowed())
+		      unburrow();
+		
 		if(mUnit->getOrder() == BWAPI::Orders::AttackMove)
 		{
 			if(mUnit->getOrderTargetPosition().getApproxDistance(target) <= accuracy)
@@ -1352,6 +1369,25 @@ void UnitClass::useTech(BWAPI::TechType tech, Unit target)
 		if(mUnit->useTech(tech, target->mUnit))
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
 	}
+}
+
+void UnitClass::burrow()
+{
+    if (exists())
+	mUnit->burrow();
+}
+
+void UnitClass::unburrow()
+{
+    if (exists())
+	mUnit->unburrow();
+}
+
+bool UnitClass::isIdle()
+{
+    if (exists())
+	mUnit->isIdle();
+    return true;
 }
 
 bool UnitClass::hasOrder(BWAPI::Order order)
