@@ -36,8 +36,8 @@ bool MineDragAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 			if(closestUnit && distance < 32*3)
 			{
 				// If we have an enemy to harm, fight him!
-				if (mUnit->isBurrowed())
-				      mUnit->unburrow();
+// 				if (mUnit->isBurrowed())
+// 				      mUnit->unburrow();
 				mUnit->attack(closestUnit);
 				return true;
 			}
@@ -46,8 +46,8 @@ bool MineDragAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 				// Seems that no enemies are in range except the damn mine.
 				// Well… nothing could be done for now. 
 				// Just rushing to the mine in hope that we kill it before it explodes
-				if (mUnit->isBurrowed())
-				      mUnit->unburrow();
+// 				if (mUnit->isBurrowed())
+// 				      mUnit->unburrow();
 				mUnit->move(spiderMine->getPosition());
 				return true;
 			}
