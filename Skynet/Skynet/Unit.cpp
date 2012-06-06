@@ -684,20 +684,18 @@ void UnitClass::research(BWAPI::TechType mType)
 		mUnit->research(mType);
 }
 
+
 void UnitClass::move(Position target, int accuracy)
 {
 	if(exists())
 	{
-		if (isBurrowed())
-		      unburrow();
-		
-		if(mUnit->getOrder() == BWAPI::Orders::Move)
+		if((mUnit->getOrder() == BWAPI::Orders::Move) || isBurrowed())
 		{
 			if(mUnit->getOrderTargetPosition().getApproxDistance(target) <= accuracy)
 				return;
 		}
 		
-		if(mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Move && mUnit->getLastCommand().getTargetPosition().getApproxDistance(target) <= accuracy)
+		if(((mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Move) || isBurrowed()) && mUnit->getLastCommand().getTargetPosition().getApproxDistance(target) <= accuracy)
 		{
 			if(mLastOrderExecuteTime >= BWAPI::Broodwar->getFrameCount())
 				return;
@@ -705,6 +703,9 @@ void UnitClass::move(Position target, int accuracy)
 				return;
 		}
 
+		if (unburrowBeforeAction())
+			return;
+		
 		if(mUnit->move(target))
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
 	}
@@ -714,9 +715,6 @@ void UnitClass::attack(Unit unit)
 {
 	if(exists() && unit)
 	{
-		if (isBurrowed())
-		      unburrow();
-		
 		if(!unit->exists())
 		{
 			move(unit->getPosition());
@@ -735,6 +733,8 @@ void UnitClass::attack(Unit unit)
 				return;
 		}
 
+		if (unburrowBeforeAction())
+			return;
 		if(mUnit->attack(unit->mUnit))
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
 	}
@@ -744,16 +744,13 @@ void UnitClass::attack(Position target, int accuracy)
 {
 	if(exists())
 	{
-		if (isBurrowed())
-		      unburrow();
-		
-		if(mUnit->getOrder() == BWAPI::Orders::AttackMove)
+		if((mUnit->getOrder() == BWAPI::Orders::AttackMove))
 		{
 			if(mUnit->getOrderTargetPosition().getApproxDistance(target) <= accuracy)
 				return;
 		}
 
-		if(mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Attack_Move && mUnit->getLastCommand().getTargetPosition().getApproxDistance(target) <= accuracy)
+		if( (mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Attack_Move) && (mUnit->getLastCommand().getTargetPosition().getApproxDistance(target) <= accuracy))
 		{
 			if(mUnit->getOrder() == BWAPI::Orders::Guard || mUnit->getOrder() == BWAPI::Orders::PlayerGuard)
 				return;
@@ -761,6 +758,8 @@ void UnitClass::attack(Position target, int accuracy)
 				return;
 		}
 
+		if (unburrowBeforeAction())
+			return;
 		if(mUnit->attack(target))
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
 	}
@@ -770,14 +769,14 @@ void UnitClass::gather(Unit unit)
 {
 	if(exists() && unit)
 	{
-		if (isBurrowed())
-		      unburrow();
-			
 		if(!unit->exists())
 		{
 			move(unit->getPosition());
 			return;
 		}
+		
+		if (unburrowBeforeAction())
+			return;
 	
 		if(unit->getType() == BWAPI::UnitTypes::Resource_Mineral_Field)
 		{
@@ -815,8 +814,8 @@ void UnitClass::returnCargo()
 {
 	if(exists())
 	{
-		if (isBurrowed())
-		      unburrow();
+		if (unburrowBeforeAction())
+			return;
 		
 		if(mUnit->getOrder() == BWAPI::Orders::ReturnGas || mUnit->getOrder() == BWAPI::Orders::ReturnMinerals)
 			return;
@@ -826,7 +825,7 @@ void UnitClass::returnCargo()
 			if(mLastOrderExecuteTime >= BWAPI::Broodwar->getFrameCount())
 				return;
 		}
-		
+
 		if(mUnit->returnCargo())
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
 	}
@@ -839,18 +838,15 @@ void UnitClass::returnCargo(Unit unit)
 
 	if(!unit->exists() || !unit->isCompleted())
 	{
-		if (isBurrowed())
-		      unburrow();
-		
 		move(unit->getPosition());
 		return;
 	}
 
 	if(exists())
 	{
-		if (isBurrowed())
-		      unburrow();
-		
+		if (unburrowBeforeAction())
+			return;
+
 		if(mUnit->getOrder() == BWAPI::Orders::ResetCollision)
 			return;
 		
@@ -1346,6 +1342,9 @@ void UnitClass::useTech(BWAPI::TechType tech, BWAPI::Position target)
 {
 	if(exists())
 	{
+		if (unburrowBeforeAction())
+			return;
+		
 		if(mUnit->getOrder() == getTechCastOrder(tech))
 		{
 			if(mUnit->getOrderTargetPosition() == target)
@@ -1372,6 +1371,9 @@ void UnitClass::useTech(BWAPI::TechType tech, Unit target)
 			move(target->getPosition());
 			return;
 		}
+		
+		if (unburrowBeforeAction())
+			return;
 
 		if(mUnit->getOrder() == getTechCastOrder(tech))//TODO: in latest revision, the tech knows the relating order
 		{
@@ -1395,10 +1397,13 @@ void UnitClass::burrow()
     if (exists())
     {
 	BWAPI::Order& order = getOrder();
-	if (isBurrowed() || order == BWAPI::Orders::Burrowing || order == BWAPI::Orders::Burrowed)
+	if (isBurrowed() || (order == BWAPI::Orders::Burrowing) || (getLastCommand().getType() == BWAPI::UnitCommandTypes::Burrow))
 	    return;
 	else
-	    mUnit->burrow();
+	{
+	    if (mUnit->burrow())
+		mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
+	}
     }
 }
 
@@ -1407,11 +1412,33 @@ void UnitClass::unburrow()
     if (exists())
     {
 	BWAPI::Order& order = getOrder();
-	if (!isBurrowed() || order == BWAPI::Orders::Unburrowing)
+	if (!isBurrowed() || order == BWAPI::Orders::Unburrowing || getLastCommand().getType() == BWAPI::UnitCommandTypes::Unburrow)
 	    return;
 	else
-	    mUnit->unburrow();
+	{
+	    if (mUnit->unburrow())
+		mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
+	}
     }
+}
+
+bool UnitClass::unburrowBeforeAction()
+{
+	// All transient states should be completed 
+	if( (mLastOrderExecuteTime >= BWAPI::Broodwar->getFrameCount()) || 
+	  (mUnit->getOrder() == BWAPI::Orders::Unburrowing) || (mUnit->getOrder() == BWAPI::Orders::Burrowing) ||  
+	  (mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Unburrow) || (mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Burrow))
+		return true;
+		
+	if (isBurrowed())
+	{
+		if(mUnit->unburrow())
+		{
+			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
+			return true;
+		}
+	}
+	return false;
 }
 
 bool UnitClass::isIdle()

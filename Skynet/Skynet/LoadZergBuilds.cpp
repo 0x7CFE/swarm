@@ -86,7 +86,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	
 	// This build order 
 	BuildOrder zvpMiddle(Zerg, BuildOrderID::ZvPMiddle, "ZvP Middle");
-	zvpMiddle.setArmyBehaviour(ArmyBehaviour::Aggresive);
+	zvpMiddle.setArmyBehaviour(ArmyBehaviour::Default);
 	
 	// FIXME drones act weird when the hatchery gets mutated into lair
 	ID_1 = zvpMiddle.addItem(Zerg_Lair, 1, BuildingLocation::Base);
