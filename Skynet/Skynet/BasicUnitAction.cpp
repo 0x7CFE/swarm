@@ -281,16 +281,13 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 		return false;
 	
 	
-	// nothing to do? just burrow and relax :D
-	// TODO Take advantage of isIdle()
-// 	if ((BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg) && 
-// 	    BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing) && 
-// 	    mUnit->isIdle() &&
-// 	    mUnit->getType().isBurrowable() 
-// 	    /* && !mUnit->getType().isWorker()*/ )
-// 	{
-// 		mUnit->burrow(); 
-// 		return true;
-// 	} else
-//		return false;
+	if (BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing))
+	{
+		if ( (BWAPI::Broodwar->getFrameCount() - mUnit->getLastOrderExecuteTime() > 3 * 24) 
+		      && mUnit->getType().isBurrowable() && mUnit->isIdle() && !mUnit->isBurrowed())
+		{
+			mUnit->burrow();
+			return true;
+		}
+	}
 }

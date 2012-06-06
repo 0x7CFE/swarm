@@ -695,7 +695,7 @@ void UnitClass::move(Position target, int accuracy)
 				return;
 		}
 		
-		if(((mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Move) || isBurrowed()) && mUnit->getLastCommand().getTargetPosition().getApproxDistance(target) <= accuracy)
+		if( ((mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Move) || isBurrowed()) && mUnit->getLastCommand().getTargetPosition().getApproxDistance(target) <= accuracy)
 		{
 			if(mLastOrderExecuteTime >= BWAPI::Broodwar->getFrameCount())
 				return;
@@ -735,6 +735,7 @@ void UnitClass::attack(Unit unit)
 
 		if (unburrowBeforeAction())
 			return;
+		
 		if(mUnit->attack(unit->mUnit))
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
 	}
@@ -1424,12 +1425,19 @@ void UnitClass::unburrow()
 
 bool UnitClass::unburrowBeforeAction()
 {
+	if (! BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing))
+		return false;
+	
 	// All transient states should be completed 
-	if( (mLastOrderExecuteTime >= BWAPI::Broodwar->getFrameCount()) || 
-	  (mUnit->getOrder() == BWAPI::Orders::Unburrowing) || (mUnit->getOrder() == BWAPI::Orders::Burrowing) ||  
-	  (mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Unburrow) || (mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Burrow))
-		return true;
-		
+	if( (mUnit->getOrder() == BWAPI::Orders::Unburrowing) || 
+	    (mUnit->getOrder() == BWAPI::Orders::Burrowing)   ||  
+	    (mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Unburrow) || 
+	    (mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Burrow))
+	{
+		if (mLastOrderExecuteTime >= BWAPI::Broodwar->getFrameCount())
+			return true;
+	}
+
 	if (isBurrowed())
 	{
 		if(mUnit->unburrow())
