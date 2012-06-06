@@ -184,6 +184,7 @@ public:
 	//Zerg specific
 	void burrow();
 	void unburrow();
+	bool unburrowBeforeAction();
 
 	//Prediction
 	void promote(BWAPI::Unit* unit);
