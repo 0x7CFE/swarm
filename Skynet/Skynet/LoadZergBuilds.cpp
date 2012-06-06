@@ -21,9 +21,9 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	// first of all, building 5 drones
 	zvpDefault.addItem(Zerg_Drone, 5, TaskType::Highest);
 	zvpDefault.addItem(Zerg_Overlord, 1, TaskType::Highest); // on 9
-	ID_1 = zvpDefault.addItem(Zerg_Spawning_Pool, 1, TaskType::Army);
+	ID_1 = zvpDefault.addItem(Zerg_Spawning_Pool, 1, TaskType::Highest);
 	zvpDefault.addItem(Zerg_Drone, CB(ID_1, CallBackType::onStarted), 3);
-	ID_2 = zvpDefault.addItem(Zerg_Zergling, 3, TaskType::Army);
+	ID_2 = zvpDefault.addItem(Zerg_Zergling, 3, TaskType::Highest);
 	       zvpDefault.addOrder(Order::Scout, CB(ID_2, CallBackType::onStarted)); // scouting until choke gets blocked
 	ID_2 = zvpDefault.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched), 3);
 	
@@ -50,18 +50,15 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched));
 	       hydraPreExpand.addOrder(Order::RefineryManager, CB(ID_1, CallBackType::onDispatched));
 	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched), 2);
-	
 	       
 //	       hydraPreExpand.addItem(Metabolic_Boost, 1, CB(ID_1, CallBackType::onCompleted));
 	
 	ID_1 = hydraPreExpand.addItem(Zerg_Hydralisk_Den, 1, TaskType::Highest);//CB(ID_1, CallBackType::onCompleted));
-	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onStarted), 2);
+	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onStarted), 3);
 	
-	ID_2 = hydraPreExpand.addItem(Zerg_Zergling, 10, BuildingLocation::Base, TaskType::Highest);
+	ID_2 = hydraPreExpand.addItem(Zerg_Zergling, 10, TaskType::Highest);
 	ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest,  CB(ID_1, CallBackType::onDispatched), 12);
-	ID_2 = hydraPreExpand.addItem(Burrowing, TaskType::Highest, CB(ID_2, CallBackType::onCompleted));
-	       
-	       hydraPreExpand.addItem(Grooved_Spines, 1, CB(ID_1, CallBackType::onDispatched));
+	       //hydraPreExpand.addItem(Grooved_Spines, TaskType::Highest, CB(ID_1, CallBackType::onDispatched));
 //	       hydraPreExpand.addItem(Muscular_Augments, 1, CB(ID_1, CallBackType::onCompleted));
 
 	ID_2 = hydraPreExpand.addItem(Zerg_Hatchery, TaskType::Highest, CB(ID_1, CallBackType::onDispatched), 1, BuildingLocation::BaseParimeter);
@@ -89,7 +86,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	
 	// This build order 
 	BuildOrder zvpMiddle(Zerg, BuildOrderID::ZvPMiddle, "ZvP Middle");
-	zvpMiddle.setArmyBehaviour(ArmyBehaviour::Default);
+	zvpMiddle.setArmyBehaviour(ArmyBehaviour::Aggresive);
 	
 	// FIXME drones act weird when the hatchery gets mutated into lair
 	ID_1 = zvpMiddle.addItem(Zerg_Lair, 1, BuildingLocation::Base);
@@ -101,13 +98,16 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	zvpMiddle.addSquad(SquadType::DefaultSquad);
 //	zvpMiddle.addSquad(SquadType::DefenseSquad);
 	
+	zvpMiddle.addItem(Burrowing, TaskType::Highest);
 	ID_1 =	zvpMiddle.addItem(Grooved_Spines, TaskType::MacroUrgent);
 	ID_1 =	zvpMiddle.addItem(Muscular_Augments, TaskType::MacroUrgent, CB(ID_1, CallBackType::onCompleted));
 	ID_1 =	zvpMiddle.addItem(Metabolic_Boost, TaskType::MacroUrgent, CB(ID_1, CallBackType::onCompleted));
+	ID_1 =  zvpMiddle.addItem(Pneumatized_Carapace, 1, CB(ID_1, CallBackType::onCompleted));
+	ID_1 =  zvpMiddle.addItem(Antennae, 1, CB(ID_1, CallBackType::onCompleted));
 	
 	zvpMiddle.addProduce(Zerg_Zergling, 14);
 	zvpMiddle.addProduce(Zerg_Hydralisk, 14);
-	zvpMiddle.addProduce(Zerg_Mutalisk, 1);
+	//zvpMiddle.addProduce(Zerg_Mutalisk, 1);
 	
 	//zvpMiddle.addProduce(Zerg_Queen, 1, 100, Condition(ConditionTest::isResearching, Ensnare)); 
 	//Condition(ConditionTest::myPlannedUnitTotalGreaterEqualThan, Zerg_Queens_Nest, 1));

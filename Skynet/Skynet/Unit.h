@@ -193,6 +193,8 @@ public:
 	//save
 	void update();
 
+	int getLastOrderExecuteTime() { return mLastOrderExecuteTime; }
+	
 private:
 	BWAPI::Unit* mUnit;
 

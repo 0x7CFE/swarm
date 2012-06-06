@@ -535,11 +535,12 @@ void UnitClass::build(TilePosition target, BWAPI::UnitType type)
 {
 	if(exists())
 	{
+		if (isBurrowed())
+		      unburrow();
+			
 		const Position targetPosition(target.x()*32+type.tileWidth()*16, target.y()*32+type.tileHeight()*16);
 		if(getDistance(type, targetPosition) > 48 || !MapHelper::isAllVisible(target, type))
 		{
-			if (isBurrowed())
-			      unburrow();
 			move(targetPosition, 0);
 			return;
 		}
@@ -560,8 +561,6 @@ void UnitClass::build(TilePosition target, BWAPI::UnitType type)
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
 		else
 		{
-			if (isBurrowed())
-			      unburrow();
 			move(targetPosition, 0);
 		}
 	}
@@ -571,6 +570,8 @@ void UnitClass::build(Unit unit)
 {
 	if(exists() && unit && unit->exists())
 	{
+// 		if (isBurrowed())
+// 		      unburrow();
 		mUnit->rightClick(unit->mUnit);
 		unit->mUnit->rightClick(mUnit);
 	}
@@ -586,8 +587,11 @@ bool UnitClass::hasAddon()
 
 void UnitClass::morph(BWAPI::UnitType type)
 {
-	if(exists())
+	if(exists()) {
+		if (isBurrowed())
+		      unburrow();
 		mUnit->morph(type);
+	}
 }
 
 BWAPI::UnitType UnitClass::getBuildType()
@@ -715,8 +719,6 @@ void UnitClass::attack(Unit unit)
 		
 		if(!unit->exists())
 		{
-			if (isBurrowed())
-			      unburrow();
 			move(unit->getPosition());
 			return;
 		}
@@ -768,6 +770,9 @@ void UnitClass::gather(Unit unit)
 {
 	if(exists() && unit)
 	{
+		if (isBurrowed())
+		      unburrow();
+			
 		if(!unit->exists())
 		{
 			move(unit->getPosition());
@@ -810,6 +815,9 @@ void UnitClass::returnCargo()
 {
 	if(exists())
 	{
+		if (isBurrowed())
+		      unburrow();
+		
 		if(mUnit->getOrder() == BWAPI::Orders::ReturnGas || mUnit->getOrder() == BWAPI::Orders::ReturnMinerals)
 			return;
 
@@ -818,7 +826,7 @@ void UnitClass::returnCargo()
 			if(mLastOrderExecuteTime >= BWAPI::Broodwar->getFrameCount())
 				return;
 		}
-
+		
 		if(mUnit->returnCargo())
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
 	}
@@ -831,12 +839,18 @@ void UnitClass::returnCargo(Unit unit)
 
 	if(!unit->exists() || !unit->isCompleted())
 	{
+		if (isBurrowed())
+		      unburrow();
+		
 		move(unit->getPosition());
 		return;
 	}
 
 	if(exists())
 	{
+		if (isBurrowed())
+		      unburrow();
+		
 		if(mUnit->getOrder() == BWAPI::Orders::ResetCollision)
 			return;
 		
@@ -862,7 +876,12 @@ void UnitClass::stop()
 	if(exists())
 	{
 		if(mUnit->getOrder() == BWAPI::Orders::Stop)
+		{
+// 			if ( (BWAPI::Broodwar->getFrameCount() - mLastOrderExecuteTime > 3*24) 
+// 			      && mUnit->getType().isBurrowable() && mUnit->isIdle() && !mUnit->isBurrowed())
+// 				  mUnit->burrow();
 			return;
+		}
 
 		if(mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Stop)
 		{
@@ -1374,13 +1393,25 @@ void UnitClass::useTech(BWAPI::TechType tech, Unit target)
 void UnitClass::burrow()
 {
     if (exists())
-	mUnit->burrow();
+    {
+	BWAPI::Order& order = getOrder();
+	if (isBurrowed() || order == BWAPI::Orders::Burrowing || order == BWAPI::Orders::Burrowed)
+	    return;
+	else
+	    mUnit->burrow();
+    }
 }
 
 void UnitClass::unburrow()
 {
     if (exists())
-	mUnit->unburrow();
+    {
+	BWAPI::Order& order = getOrder();
+	if (!isBurrowed() || order == BWAPI::Orders::Unburrowing)
+	    return;
+	else
+	    mUnit->unburrow();
+    }
 }
 
 bool UnitClass::isIdle()
