@@ -49,12 +49,12 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	ID_1 = hydraPreExpand.addItem(Zerg_Extractor, 1, TaskType::Highest);
 	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched));
 	       hydraPreExpand.addOrder(Order::RefineryManager, CB(ID_1, CallBackType::onDispatched));
-	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched), 2);
+	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched), 4);
 	       
 //	       hydraPreExpand.addItem(Metabolic_Boost, 1, CB(ID_1, CallBackType::onCompleted));
 	
 	ID_1 = hydraPreExpand.addItem(Zerg_Hydralisk_Den, 1, TaskType::Highest);//CB(ID_1, CallBackType::onCompleted));
-	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onStarted), 3);
+	       hydraPreExpand.addItem(Zerg_Drone, CB(ID_1, CallBackType::onStarted), 4);
 	
 	ID_2 = hydraPreExpand.addItem(Zerg_Zergling, 10, TaskType::Highest);
 	ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest,  CB(ID_1, CallBackType::onDispatched), 12);
@@ -98,8 +98,8 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	zvpMiddle.addSquad(SquadType::DefaultSquad);
 //	zvpMiddle.addSquad(SquadType::DefenseSquad);
 	
-	zvpMiddle.addItem(Burrowing, TaskType::Highest);
-	ID_1 =	zvpMiddle.addItem(Grooved_Spines, TaskType::MacroUrgent);
+	ID_1 =	zvpMiddle.addItem(Burrowing, TaskType::Highest, CB(ID_1, CallBackType::onCompleted));
+	ID_1 =	zvpMiddle.addItem(Grooved_Spines, TaskType::Highest, CB(ID_1, CallBackType::onCompleted));
 	ID_1 =	zvpMiddle.addItem(Muscular_Augments, TaskType::MacroUrgent, CB(ID_1, CallBackType::onCompleted));
 	ID_1 =	zvpMiddle.addItem(Metabolic_Boost, TaskType::MacroUrgent, CB(ID_1, CallBackType::onCompleted));
 	ID_1 =  zvpMiddle.addItem(Pneumatized_Carapace, 1, CB(ID_1, CallBackType::onCompleted));
