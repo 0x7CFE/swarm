@@ -85,11 +85,17 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
 			bool hasPylon = defenseType.requiresPsi() ? false : true;
 			int thisCount = 0;
 			
+			//BWAPI::UnitType defenseType
+			
 			// Searching for defenses that were built already
 			for (Unit building : base->getBuildings())
 			{
-				if(building->getType() == defenseType)
-					++thisCount; // Ok
+// 				if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+// 					if(building->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony || building->getType() == defenseType)
+// 						++thisCount; // Ok
+// 				else
+					if(building->getType() == defenseType || building->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+						++thisCount; // Ok
 
 				// For Protoss only
 				if(building->getType() == BWAPI::UnitTypes::Protoss_Pylon)
@@ -131,8 +137,18 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
 			{
 				LOGMESSAGE(String_Builder() << "Built Defense.");
 				
-				// TODO BuildingLocation::BaseChoke for Zerg
-				mDefenseTasks.push_front(TaskManager::Instance().build(defenseType, TaskType::Defense)); 
+				if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+				{
+					// TODO BuildingLocation::BaseChoke for Zerg
+					if ((defenseType == BWAPI::UnitTypes::Zerg_Sunken_Colony) || 
+					    (defenseType == BWAPI::UnitTypes::Zerg_Spore_Colony))
+					{
+						mDefenseTasks.push_front(TaskManager::Instance().build(defenseType, TaskType::Defense)); 
+						mDefenseTasks.push_front(TaskManager::Instance().build(BWAPI::UnitTypes::Zerg_Creep_Colony, TaskType::Defense)); 
+					}
+				} else
+					mDefenseTasks.push_front(TaskManager::Instance().build(defenseType, TaskType::Defense)); 
+				
 			}
 		}
 		else if(defensesNeeded < 0) 
