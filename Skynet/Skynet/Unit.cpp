@@ -332,9 +332,13 @@ void UnitClass::drawUnitPosition()
 
 	if(isMorphing())
 		BWAPI::Broodwar->drawTextMap(pos.x() + type.dimensionRight(), pos.y()+40, "Morphing");
-
-	if(isCompleted())
-		BWAPI::Broodwar->drawTextMap(pos.x() + type.dimensionRight(), pos.y()+50, "Completed");
+	else if(isCompleted())
+		BWAPI::Broodwar->drawTextMap(pos.x() + type.dimensionRight(), pos.y()+40, "Completed");
+	
+	BWAPI::Broodwar->drawTextMap(pos.x() + type.dimensionRight(), pos.y()+50, "Last cmd: %s", mUnit->getLastCommand().getType().getName().c_str());
+	
+	if(isBurrowed())
+		BWAPI::Broodwar->drawTextMap(pos.x() + type.dimensionRight(), pos.y()+60, "Burrowed");
 
 	Position target = getTargetPosition();
 	BWAPI::Broodwar->drawLine(BWAPI::CoordinateType::Map, pos.x(), pos.y(), target.x(), target.y(), player->getColor());
@@ -689,13 +693,19 @@ void UnitClass::move(Position target, int accuracy)
 {
 	if(exists())
 	{
-		if((mUnit->getOrder() == BWAPI::Orders::Move) || isBurrowed())
+		if (isBurrowed())
+		{
+			if (mUnit->getPosition().getApproxDistance(target) <= accuracy)
+				return;
+		} 
+		
+		if((mUnit->getOrder() == BWAPI::Orders::Move))
 		{
 			if(mUnit->getOrderTargetPosition().getApproxDistance(target) <= accuracy)
 				return;
 		}
 		
-		if( ((mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Move) || isBurrowed()) && mUnit->getLastCommand().getTargetPosition().getApproxDistance(target) <= accuracy)
+		if( ((mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Move)) && mUnit->getLastCommand().getTargetPosition().getApproxDistance(target) <= accuracy)
 		{
 			if(mLastOrderExecuteTime >= BWAPI::Broodwar->getFrameCount())
 				return;
@@ -1429,7 +1439,8 @@ bool UnitClass::unburrowBeforeAction()
 		return false;
 	
 	// All transient states should be completed 
-	if( (mUnit->getOrder() == BWAPI::Orders::Unburrowing) || 
+	if( //(mLastOrderExecuteTime >= BWAPI::Broodwar->getFrameCount()) ||
+	    (mUnit->getOrder() == BWAPI::Orders::Unburrowing) || 
 	    (mUnit->getOrder() == BWAPI::Orders::Burrowing)   ||  
 	    (mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Unburrow) || 
 	    (mUnit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Burrow))
