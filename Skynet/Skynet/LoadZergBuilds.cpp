@@ -22,7 +22,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	zvpDefault.addItem(Zerg_Drone, 5, TaskType::Highest);
 	zvpDefault.addItem(Zerg_Overlord, 1, TaskType::Highest); // on 9
 	ID_1 = zvpDefault.addItem(Zerg_Spawning_Pool, 1, TaskType::Highest);
-	zvpDefault.addItem(Zerg_Drone, CB(ID_1, CallBackType::onStarted), 3);
+	zvpDefault.addItem(Zerg_Drone, 3, TaskType::Highest); //, CB(ID_1, CallBackType::onStarted));
 	ID_2 = zvpDefault.addItem(Zerg_Zergling, 3, TaskType::Highest);
 	       zvpDefault.addOrder(Order::Scout, CB(ID_2, CallBackType::onStarted)); // scouting until choke gets blocked
 	ID_2 = zvpDefault.addItem(Zerg_Drone, CB(ID_1, CallBackType::onDispatched), 3);
@@ -97,7 +97,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	zvpMiddle.addSquad(SquadType::DefaultSquad);
 //	zvpMiddle.addSquad(SquadType::DefenseSquad);
 	
-	zvpMiddle.addItem(Burrowing, TaskType::Highest, CB(ID_1, CallBackType::onDispatched));
+	ID_3 = zvpMiddle.addItem(Burrowing, TaskType::Highest, CB(ID_1, CallBackType::onDispatched));
 	zvpMiddle.addOrder(Order::Scout, CB(ID_1, CallBackType::onCompleted));
 	
 	ID_1 =	zvpMiddle.addItem(Grooved_Spines, 1, CB(ID_1, CallBackType::onDispatched));
@@ -123,7 +123,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 			     Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Scout, 3)
 			    );
 	
-	zvpMiddle.addOrder(Order::ExpansionManager);
+	zvpMiddle.addOrder(Order::ExpansionManager, CB(ID_3, CallBackType::onCompleted));
 	zvpMiddle.addOrder(Order::SupplyManager);
 	zvpMiddle.addOrder(Order::TrainWorkers);
 	zvpMiddle.addOrder(Order::MacroArmyProduction);

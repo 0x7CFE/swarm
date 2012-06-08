@@ -255,6 +255,8 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 			}
 		}
 	}
+	
+	return true;
 }
 
 bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
