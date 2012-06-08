@@ -858,9 +858,6 @@ void UnitClass::returnCargo(Unit unit)
 
 	if(exists())
 	{
-		if (unburrowBeforeAction())
-			return;
-
 		if(mUnit->getOrder() == BWAPI::Orders::ResetCollision)
 			return;
 		
@@ -875,6 +872,9 @@ void UnitClass::returnCargo(Unit unit)
 			if(mLastOrderExecuteTime >= BWAPI::Broodwar->getFrameCount())
 				return;
 		}
+      
+      if (unburrowBeforeAction())
+         return;
 
 		if(mUnit->rightClick(unit->mUnit))
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
