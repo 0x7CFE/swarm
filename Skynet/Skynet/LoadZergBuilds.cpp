@@ -108,7 +108,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	
 	ID_1 =  zvpMiddle.addItem(Pneumatized_Carapace, 1, CB(ID_1, CallBackType::onCompleted));
 	ID_1 =  zvpMiddle.addItem(Antennae, 1, CB(ID_1, CallBackType::onCompleted));
-	zvpMiddle.addItem(Zerg_Evolution_Chamber, CB(ID_1, CallBackType::onCompleted), 2);
+	zvpMiddle.addItem(Zerg_Evolution_Chamber, CB(ID_1, CallBackType::onCompleted), 1);
 	
 	zvpMiddle.addProduce(Zerg_Zergling, 14);
 	zvpMiddle.addProduce(Zerg_Hydralisk, 14);
@@ -117,7 +117,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	zvpMiddle.addProduce(Zerg_Queen, 8, 100, Condition(ConditionTest::isResearching, Ensnare)); 
 	//Condition(ConditionTest::myPlannedUnitTotalGreaterEqualThan, Zerg_Queens_Nest, 1));
 	zvpMiddle.addProduce(Zerg_Defiler, 8, 100, Condition(ConditionTest::isResearching, Plague));
-	zvpMiddle.addProduce(Zerg_Lurker, 1, 100, Condition(ConditionTest::isResearching, Lurker_Aspect)); // TODO Lurker operation
+	zvpMiddle.addProduce(Zerg_Lurker, 8, 100, Condition(ConditionTest::isResearching, Lurker_Aspect)); // TODO Lurker operation
 	zvpMiddle.addProduce(Zerg_Scourge, 14, 100, 
 			     Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Corsair, 5) || 
 			     Condition(ConditionTest::enemyUnitCountGreaterEqualThan, Protoss_Shuttle, 1) || 
