@@ -114,7 +114,12 @@ bool PsiStormAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 
 			// These units are too fast or too cheap to be the target (not effective)
 			const BWAPI::UnitType &type = unit->getType();
-			if(type.isBuilding() || type == BWAPI::UnitTypes::Terran_Vulture_Spider_Mine || type == BWAPI::UnitTypes::Zerg_Egg || type == BWAPI::UnitTypes::Protoss_Interceptor || type == BWAPI::UnitTypes::Zerg_Larva || type == BWAPI::UnitTypes::Protoss_Scarab)
+			if(type.isBuilding() || 
+			   type == BWAPI::UnitTypes::Terran_Vulture_Spider_Mine || 
+			   type == BWAPI::UnitTypes::Zerg_Egg || 
+			   type == BWAPI::UnitTypes::Protoss_Interceptor || 
+			   type == BWAPI::UnitTypes::Zerg_Larva || 
+			   type == BWAPI::UnitTypes::Protoss_Scarab)
 				continue;
 
 			// Unit is too far away
