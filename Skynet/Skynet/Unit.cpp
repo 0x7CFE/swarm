@@ -825,9 +825,6 @@ void UnitClass::returnCargo()
 {
 	if(exists())
 	{
-		if (unburrowBeforeAction())
-			return;
-		
 		if(mUnit->getOrder() == BWAPI::Orders::ReturnGas || mUnit->getOrder() == BWAPI::Orders::ReturnMinerals)
 			return;
 
@@ -837,6 +834,9 @@ void UnitClass::returnCargo()
 				return;
 		}
 
+		if (unburrowBeforeAction())
+			return;
+		
 		if(mUnit->returnCargo())
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
 	}
@@ -847,9 +847,9 @@ void UnitClass::returnCargo(Unit unit)
 	if(!unit)
 		return;
 
-   // Zerg may mutate it's hatchery into Lair and then Hive.
-   // Still, this does not affect the resource depo ability.
-   // So, we only need to wait when the hatchery is built, not mutated
+	// Zerg may mutate it's hatchery into Lair and then Hive.
+	// Still, this does not affect the resource depo ability.
+	// So, we only need to wait when the hatchery is built, not mutated
 	if(!unit->exists() || (!unit->isCompleted() && unit->getType() == BWAPI::UnitTypes::Zerg_Hatchery))
 	{
 		move(unit->getPosition());
@@ -873,8 +873,8 @@ void UnitClass::returnCargo(Unit unit)
 				return;
 		}
       
-      if (unburrowBeforeAction())
-         return;
+		if (unburrowBeforeAction())
+			return;
 
 		if(mUnit->rightClick(unit->mUnit))
 			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
