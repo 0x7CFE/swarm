@@ -265,7 +265,7 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 	   mUnit->getOrder() == BWAPI::Orders::CastSpawnBroodlings)
 		return true;
 
-	// Some spell had just been casted, need to wait some time
+	// Some spell had just been casted, need to wait for some time
 	if(mUnit->getSpellCooldown() > BWAPI::Broodwar->getRemainingLatencyFrames())
 		return false;
 	
