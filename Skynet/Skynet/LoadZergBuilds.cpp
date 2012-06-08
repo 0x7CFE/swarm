@@ -88,12 +88,11 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	BuildOrder zvpMiddle(Zerg, BuildOrderID::ZvPMiddle, "ZvP Middle");
 	zvpMiddle.setArmyBehaviour(ArmyBehaviour::Default);
 	
-	// FIXME drones act weird when the hatchery gets mutated into lair
 	ID_1 = zvpMiddle.addItem(Zerg_Lair, 1, BuildingLocation::Base);
 //	       zvpMiddle.addItem(Pneumatized_Carapace, 1, CB(ID_2, CallBackType::onCompleted));
 	
 	zvpMiddle.addItem(Zerg_Zergling, 10, TaskType::Highest);
-	zvpMiddle.addItem(Zerg_Hydralisk, TaskType::Highest,  CB(ID_1, CallBackType::onDispatched), 12);
+	zvpMiddle.addItem(Zerg_Hydralisk, TaskType::Highest,  CB(ID_1, CallBackType::onDispatched), 10);
 //	zvpMiddle.addItem(Zerg_Defiler_Mound, 1);
 	
 	zvpMiddle.addSquad(SquadType::DefaultSquad);
@@ -102,7 +101,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	zvpMiddle.addItem(Burrowing, TaskType::Highest, CB(ID_1, CallBackType::onDispatched));
 	zvpMiddle.addOrder(Order::Scout, CB(ID_1, CallBackType::onCompleted));
 	
-	ID_1 =	zvpMiddle.addItem(Grooved_Spines, TaskType::Highest, CB(ID_1, CallBackType::onDispatched));
+	ID_1 =	zvpMiddle.addItem(Grooved_Spines, 1, CB(ID_1, CallBackType::onDispatched));
 	ID_1 =	zvpMiddle.addItem(Muscular_Augments, TaskType::MacroUrgent, CB(ID_1, CallBackType::onCompleted));
 	ID_1 =	zvpMiddle.addItem(Metabolic_Boost, TaskType::MacroUrgent, CB(ID_1, CallBackType::onCompleted));
 	

@@ -106,11 +106,15 @@ void Behaviour::createDefaultActions()
 	mMicroActions.push_back(MicroAction(new BasicUnitAction(mUnit, targetPriorities)));
 	mMicroActions.push_back(MicroAction(new GoalAction(mUnit)));
 	
-	
 	// Zerg part
-	if (unitType == BWAPI::UnitTypes::Zerg_Zergling)
+	if (unitType == BWAPI::UnitTypes::Zerg_Zergling || 
+	    unitType == BWAPI::UnitTypes::Zerg_Hydralisk || 
+	    unitType == BWAPI::UnitTypes::Zerg_Lurker)
 	{
-	    firstTargets.insert(BWAPI::UnitTypes::Protoss_Dragoon);
+	    firstTargets.insert(BWAPI::UnitTypes::Protoss_High_Templar);
 	    firstTargets.insert(BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode);
 	}
+ 
+	if (unitType == BWAPI::UnitTypes::Zerg_Scourge) 
+	    firstTargets.insert(BWAPI::UnitTypes::Protoss_Corsair);
 }
