@@ -960,12 +960,14 @@ int UnitClass::getEnsnareTimer()
 {
 	if (exists())
 		return mUnit->getEnsnareTimer();
+	return 0;
 }
 
 int UnitClass::getPlagueTimer()
 {
 	if (exists())
 		return mUnit->getPlagueTimer();
+	return 0;
 }
 
 
@@ -1487,7 +1489,7 @@ bool UnitClass::isParasited()
 {
     if (exists())
 	return mUnit->isParasited();
-    return true;
+    return false;
 }
 
 bool UnitClass::hasOrder(BWAPI::Order order)
