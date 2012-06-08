@@ -956,6 +956,19 @@ int UnitClass::getDefenseMatrixPoints()
 	return 0;
 }
 
+int UnitClass::getEnsnareTimer()
+{
+	if (exists())
+		return mUnit->getEnsnareTimer();
+}
+
+int UnitClass::getPlagueTimer()
+{
+	if (exists())
+		return mUnit->getPlagueTimer();
+}
+
+
 void UnitClass::setPosition(Position position)
 {
 	mStoredPosition = position;
@@ -1466,7 +1479,14 @@ bool UnitClass::unburrowBeforeAction()
 bool UnitClass::isIdle()
 {
     if (exists())
-	mUnit->isIdle();
+	return mUnit->isIdle();
+    return true;
+}
+
+bool UnitClass::isParasited()
+{
+    if (exists())
+	return mUnit->isParasited();
     return true;
 }
 

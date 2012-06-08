@@ -139,12 +139,15 @@ public:
 	int getHealth();
 	int getShield();
 	int getDefenseMatrixPoints();
+	int getEnsnareTimer();
+	int getPlagueTimer();
 
 	bool isRepairing();
 	bool isHealing();
 	bool isBeingHealed();
 	bool isBeingRepaired();
 	bool isIdle();
+	bool isParasited();
 
 	int getEnergy();
 	std::list<BWAPI::UnitType> getTrainingQueue();
