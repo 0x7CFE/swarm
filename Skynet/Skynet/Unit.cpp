@@ -847,7 +847,10 @@ void UnitClass::returnCargo(Unit unit)
 	if(!unit)
 		return;
 
-	if(!unit->exists() || !unit->isCompleted())
+   // Zerg may mutate it's hatchery into Lair and then Hive.
+   // Still, this does not affect the resource depo ability.
+   // So, we only need to wait when the hatchery is built, not mutated
+	if(!unit->exists() || (!unit->isCompleted() && unit->getType() == BWAPI::UnitTypes::Zerg_Hatchery))
 	{
 		move(unit->getPosition());
 		return;
