@@ -8,6 +8,8 @@
 
 bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 {
+	//TODO LatencyTracker to handle spell. Do not cast spell is another is pending in the region or the unit targeted
+	
 	// Checking whether we could cast a spell right now
 	if(BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Spawn_Broodlings) && mUnit->getEnergy() >= BWAPI::TechTypes::Spawn_Broodlings.energyUsed())
 	{
@@ -62,6 +64,8 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 
 bool QueenAction::castParasite(const UnitGroup& allEnemies)
 {
+	//TODO LatencyTracker to handle spell. Do not cast spell is another is pending in the region or the unit targeted
+	
 	// Checking whether we could cast a spell right now
 	if(BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Spawn_Broodlings) && mUnit->getEnergy() >= BWAPI::TechTypes::Spawn_Broodlings.energyUsed())
 	{
@@ -147,6 +151,7 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 	//		Good against marines: disables the effect of stimpacks 
 	//		Corsairs and Mutas power may be greatly reduced with ensnare
 	//		As a defence spell ensnare may be useful against incoming enemy army
+	//TODO LatencyTracker to handle ensnares. Do not cast spell is another is pending in the region
   
 	// Checking whether we could cast a spell right now
 	if(BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Ensnare) && mUnit->getEnergy() >= BWAPI::TechTypes::Ensnare.energyUsed())
@@ -302,8 +307,9 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 		if (castBroodlings(allEnemies))
 		    engaged = true;
 		
-		if (castParasite(allEnemies))
-		    engaged = true;
+		if (squadGoal.getActionType() != ActionType::Attack)
+			if (castParasite(allEnemies))
+			    engaged = true;
 		
 		if (castEnsnare(allEnemies))
 		    engaged = true;
@@ -346,7 +352,7 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 			}
 		}
 		
-		if (mUnit->getDistance(sniperUnit) < maxRange)
+		if (sniperUnit && (mUnit->getDistance(sniperUnit) < maxRange + 25))
 		{
 			// We're too close to enemy. Running away
 			stayAtRange(mUnit, 
@@ -377,9 +383,15 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 				Position squadLocation = unitsToStayNearby.getCenter();
 				if(mUnit->getDistance(squadLocation) > 300)
 				{
-					mUnit->move(squadLocation);
+					mUnit->move(squadLocation, 256); // TODO Fix constant
 					return true;
 				}
+			}
+			else 
+			{
+				// If noone is nearby, then go to the goal target position
+				mUnit->move(squadGoal.getPosition());
+				return true;
 			}
 		}
 	}
