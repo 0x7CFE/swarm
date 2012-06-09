@@ -313,15 +313,32 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 	if (!engaged) 
 	{
 		// Need to be close to our units, but still not too close to the enemy
-		// TODO Special case for Dark Archon and High Templar
 		int maxRange = 0;
 		Unit sniperUnit;
 		for (Unit enemy : allEnemies) 
 		{
 			if (mUnit->getDistance(enemy) > 300) // TODO constant
 			      continue; // this unit is too far away to be afraid of
-		  
-			int currentRange = enemy->getWeaponMaxRange(mUnit);
+
+			BWAPI::UnitType type = enemy->getType();
+			int currentRange = 0; 
+			if (type.isSpellcaster()) {
+				// Selecting the most deadliest spell
+				if (type == BWAPI::UnitTypes::Protoss_Dark_Archon)
+					currentRange = BWAPI::TechTypes::Feedback.getWeapon().maxRange();
+				else if (type == BWAPI::UnitTypes::Protoss_High_Templar)
+					currentRange = BWAPI::TechTypes::Psionic_Storm.getWeapon().maxRange();
+				else if (type == BWAPI::UnitTypes::Terran_Science_Vessel)
+					currentRange = BWAPI::TechTypes::Irradiate.getWeapon().maxRange();
+				else if (type == BWAPI::UnitTypes::Zerg_Defiler)
+					currentRange = BWAPI::TechTypes::Plague.getWeapon().maxRange();
+				else if (type == BWAPI::UnitTypes::Terran_Ghost)
+					currentRange = BWAPI::TechTypes::Lockdown.getWeapon().maxRange();
+				else // some spellcasters may still be a war unit (eg. Terran Ghost)
+					currentRange = enemy->getWeaponMaxRange(mUnit);
+			} else
+				currentRange = enemy->getWeaponMaxRange(mUnit);
+			      
 			if (currentRange > maxRange)
 			{
 				maxRange = currentRange;
