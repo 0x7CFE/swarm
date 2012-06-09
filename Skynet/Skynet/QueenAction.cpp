@@ -327,12 +327,12 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 		// Need to be close to our units, but still not too close to the enemy
 		// TODO Special case for Dark Archon and High Templar
 		Unit closestEnemy = allEnemies.getClosestUnit(mUnit);
-		int weaponRange = closestEnemy->getWeaponMaxRange();
+		int weaponRange = closestEnemy->getWeaponMaxRange(mUnit);
 		if (mUnit->getDistance(closestEnemy) < weaponRange)
 		{
 			// We're too close to enemy. Running away
 			stayAtRange(mUnit, 
-				    closestEnemy->getPosition, 
+				    closestEnemy->getPosition(), 
 				    weaponRange + 64, 
 				    closestEnemy->getDistance(mUnit));
 			return true;
