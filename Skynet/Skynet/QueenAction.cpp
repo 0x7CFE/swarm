@@ -4,6 +4,7 @@
 #include "UnitInformation.h"
 #include "LatencyTracker.h"
 #include "Logger.h"
+#include "UnitHelper.h"
 
 bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 {
@@ -28,7 +29,9 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 			const BWAPI::UnitType &type = unit->getType();
 			if (type == BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode ||
 			    type == BWAPI::UnitTypes::Protoss_High_Templar || 
-			    type == BWAPI::UnitTypes::Zerg_Defiler) 
+			    type == BWAPI::UnitTypes::Zerg_Defiler || 
+			    type == BWAPI::UnitTypes::Zerg_Ultralisk 
+			   ) 
 				primaryTargets.insert(unit);
 
 			if (unit->getTarget() == mUnit && unit->getType().isOrganic() && !unit->getType().isFlyer())				
@@ -140,6 +143,10 @@ bool QueenAction::castParasite(const UnitGroup& allEnemies)
 bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 {
 	// TODO Army support. Ensnare a cloaked unit to reveal it when no detectors present
+	// TODO Priority list of targets: 
+	//		Good against marines: disables the effect of stimpacks 
+	//		Corsairs and Mutas power may be greatly reduced with ensnare
+	//		As a defence spell ensnare may be useful against incoming enemy army
   
 	// Checking whether we could cast a spell right now
 	if(BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Ensnare) && mUnit->getEnergy() >= BWAPI::TechTypes::Ensnare.energyUsed())
@@ -148,6 +155,7 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 		int numTargetting = UnitInformation::Instance().getUnitsTargetting(mUnit).size();
 
 		UnitGroup targetsToChooseFrom;
+// 		UnitGroup needsDetecting;
 
 		for (Unit unit : allEnemies)
 		{
@@ -156,7 +164,7 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 			if(!unit->exists() || unit->isStasised() || (unit->getEnsnareTimer() > 0) )
 				continue;
 
-			// These units are too fast or too cheap to be the target (not effective)
+			// These units should be skipped. It's just a waste of energy to spell them
 			const BWAPI::UnitType &type = unit->getType();
 			if(type.isBuilding() || 
 			   type == BWAPI::UnitTypes::Terran_Vulture_Spider_Mine || 
@@ -170,6 +178,16 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 			if(mUnit->getDistance(unit) > BWAPI::TechTypes::Ensnare.getWeapon().maxRange())
 				continue;
 
+// 			UnitType& unitType = mUnit->getType();
+// 			if (! unit->isDetected()) // TODO
+// 			{
+// 				if(unitType.hasPermanentCloak() || 
+// 				   unitType == BWAPI::UnitTypes::Zerg_Lurker || 
+// 				   unit->isCloaked() || 
+// 				   unit->isBurrowed())
+// 					 needsDetecting.insert(unit);
+// 			} else 
+			
 			// Ok, seems this unit could be the victim
 			targetsToChooseFrom.insert(unit);
 		}
@@ -259,6 +277,21 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 	return true;
 }
 
+// TODO Stolen from BasicUnitAction.cpp. 
+// 	Rewrite w/o copypaste
+void stayAtRange(Unit unit, Position targetPositon, int maxRange, int currentRange)
+{
+	Position current = unit->getPosition();
+
+	Vector direction = current - targetPositon;
+
+	direction.normalise();
+	direction *= float(maxRange - currentRange);
+	direction += Vector(current);
+
+	unit->move(direction);
+}
+
 bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 {
 	// Checking whether queen is already casting a spell
@@ -267,26 +300,70 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 	   mUnit->getOrder() == BWAPI::Orders::CastSpawnBroodlings)
 		return true;
 
+	bool engaged = false;
+	const UnitGroup& allEnemies = UnitTracker::Instance().selectAllEnemy();
+	
 	// Some spell had just been casted, need to wait for some time
 	if(mUnit->getSpellCooldown() > BWAPI::Broodwar->getRemainingLatencyFrames())
 		return false;
-	
-	bool engaged = false;
-	
-	const UnitGroup& allEnemies = UnitTracker::Instance().selectAllEnemy();
-	
-	if (castBroodlings(allEnemies))
-	    engaged = true;
-	
-	if (castParasite(allEnemies))
-	    engaged = true;
-	
-	if (castEnsnare(allEnemies))
-	    engaged = true;
+	else {
+		
+		// NOTE Current implementation of spell casters is almost independent.
+		//	Maybe we should gather all target information and then decide what spell to apply
+		
+		if (castBroodlings(allEnemies))
+		    engaged = true;
+		
+		if (castParasite(allEnemies))
+		    engaged = true;
+		
+		if (castEnsnare(allEnemies))
+		    engaged = true;
+	}
 
+	// If no spell is engaged we need to check our position to be optimal
 	if (!engaged) 
 	{
-	      // Movement tricks
+		// Need to be close to our units, but still not too close to the enemy
+		// TODO Special case for Dark Archon and High Templar
+		Unit closestEnemy = allEnemies.getClosestUnit(mUnit);
+		int weaponRange = closestEnemy->getWeaponMaxRange();
+		if (mUnit->getDistance(closestEnemy) < weaponRange)
+		{
+			// We're too close to enemy. Running away
+			stayAtRange(mUnit, 
+				    closestEnemy->getPosition, 
+				    weaponRange + 64, 
+				    closestEnemy->getDistance(mUnit));
+			return true;
+		} else {
+			// Enemies are not so close. We may hold our group
+			UnitGroup unitsToStayNearby;
+			for (Unit unit : squadUnitGroup)
+			{
+				if(!UnitHelper::isArmyUnit(unit->getType()))
+					continue;
+
+				if(unit->getType() == BWAPI::UnitTypes::Zerg_Queen || unit->getType().isBuilding())
+					continue;
+
+				if(mUnit->getDistance(unit) > 250) // TODO What constant should we use?
+					continue;
+
+				unitsToStayNearby.insert(unit);
+			}
+			
+			unitsToStayNearby = unitsToStayNearby.getBestFittingToCircle(136); // TODO Fix constant
+			if(!unitsToStayNearby.empty())
+			{
+				Position squadLocation = unitsToStayNearby.getCenter();
+				if(mUnit->getDistance(squadLocation) > 300)
+				{
+					mUnit->move(squadLocation);
+					return true;
+				}
+			}
+		}
 	}
 	
 	return engaged;

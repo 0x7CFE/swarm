@@ -29,12 +29,6 @@ bool DetectorAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGro
 
 	if(needsDetecting)
 	{
-// 		int sightRange = 0; 
-// 		if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
-// 		      sightRange = BWAPI::UnitTypes::Zerg_Overlord.sightRange();
-// 		else if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Protoss)
-// 		      sightRange = BWAPI::UnitTypes::Protoss_Observer.sightRange();
-		
 		if(unitDistance > mUnit->getType().sightRange())
 		{
 			mUnit->move(needsDetecting->getPosition());
