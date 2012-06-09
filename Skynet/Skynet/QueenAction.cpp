@@ -277,20 +277,8 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 	return true;
 }
 
-// TODO Stolen from BasicUnitAction.cpp. 
-// 	Rewrite w/o copypaste
-void stayAtRange(Unit unit, Position targetPositon, int maxRange, int currentRange)
-{
-	Position current = unit->getPosition();
-
-	Vector direction = current - targetPositon;
-
-	direction.normalise();
-	direction *= float(maxRange - currentRange);
-	direction += Vector(current);
-
-	unit->move(direction);
-}
+// Defined in BasicUnitAction.cpp. 
+void stayAtRange(Unit unit, Position targetPositon, int maxRange, int currentRange);
 
 bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 {
