@@ -320,9 +320,7 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 		Unit closestThreat;
 		int  threatWeaponRange = 0;
 		
-		// TODO Keep away from sniper units and from unit that is targeted and  may attack us 
-// 		UnitGroup targettingUnits = UnitInformation::Instance().getUnitsTargetting(mUnit);
-		
+		// Keep away from enemy units that may attack us
 		for (Unit enemy : allEnemies) 
 		{
 			if (mUnit->getDistance(enemy) > 1000) // TODO constant
