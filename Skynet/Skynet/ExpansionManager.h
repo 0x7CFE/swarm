@@ -4,6 +4,7 @@
 
 #include "Singleton.h"
 #include "Task.h"
+#include "Base.h"
 
 class ExpansionManagerClass
 {
@@ -16,6 +17,9 @@ private:
 	std::list<TaskPointer> mRefineryTasks;
 	void updateRefineries();
 
+        typedef std::map<Base, TaskPointer> TCreepMap;
+        TCreepMap mCreepTasks;
+        
 	TaskPointer mPylon;
 	std::list<TaskPointer> mDefenseTasks;
 	void updateDefense();
