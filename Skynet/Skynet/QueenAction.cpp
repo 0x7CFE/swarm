@@ -305,14 +305,11 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 		//	Maybe we should gather all target information and then decide what spell to apply
 		
 		if (castBroodlings(allEnemies))
-		    engaged = true;
-		
-		if (squadGoal.getActionType() != ActionType::Attack)
-			if (castParasite(allEnemies))
-			    engaged = true;
-		
-		if (castEnsnare(allEnemies))
-		    engaged = true;
+			engaged = true;
+		else if ( (squadGoal.getActionType() != ActionType::Attack) && castParasite(allEnemies) )
+			engaged = true;
+		else if (castEnsnare(allEnemies))
+			engaged = true;
 	}
 
 	// If no spell is engaged we need to check our position to be optimal
