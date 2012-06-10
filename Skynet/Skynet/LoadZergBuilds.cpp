@@ -61,7 +61,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	       //hydraPreExpand.addItem(Grooved_Spines, TaskType::Highest, CB(ID_1, CallBackType::onDispatched));
 //	       hydraPreExpand.addItem(Muscular_Augments, 1, CB(ID_1, CallBackType::onCompleted));
 
-	ID_2 = hydraPreExpand.addItem(Zerg_Hatchery, TaskType::Highest, CB(ID_1, CallBackType::onDispatched), 1, BuildingLocation::BaseParimeter);
+	ID_2 = hydraPreExpand.addItem(Zerg_Hatchery, TaskType::Highest, CB(ID_1, CallBackType::onCompleted), 1, BuildingLocation::BaseParimeter);
 	hydraPreExpand.addItem(Zerg_Drone, CB(ID_2, CallBackType::onStarted), 4);
 
 	       // TODO Place properly
@@ -95,7 +95,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	zvpMiddle.addItem(Zerg_Hydralisk, TaskType::Highest,  CB(ID_1, CallBackType::onDispatched), 10);
 	
 	zvpMiddle.addSquad(SquadType::DefaultSquad);
-//	zvpMiddle.addSquad(SquadType::DefenseSquad);
+	zvpMiddle.addSquad(SquadType::DefenseSquad);
 	
 	ID_3 = zvpMiddle.addItem(Burrowing, TaskType::Highest, CB(ID_1, CallBackType::onDispatched));
 	zvpMiddle.addOrder(Order::Scout, CB(ID_1, CallBackType::onCompleted));

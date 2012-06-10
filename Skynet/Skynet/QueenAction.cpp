@@ -353,7 +353,7 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 			// Additional coefficient to afraid units that are targeted us
 			// TODO Modify depending on current squad action (attack/hold/retreat)
 			if (enemy->getTarget() == mUnit) 
-			      currentRange -= 50; // TODO constant
+			      currentRange -= 5; // TODO constant
 			
 			if (currentRange < minEffectiveRange)
 			{
@@ -365,12 +365,12 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 		
 		if (closestThreat)
 		{
-			if (minEffectiveRange < 128)
+			if (minEffectiveRange < 10) //std::max(BWAPI::TechTypes::Ensnare.getWeapon().maxRange(), BWAPI::TechTypes::Spawn_Broodlings.getWeapon().maxRange()))
 			{
 				// We're under attack! Move move move!
 				stayAtRange(mUnit, 
 					    closestThreat->getPosition(), 
-					    threatWeaponRange + 128, 
+					    threatWeaponRange + 64, 
 					    closestThreat->getDistance(mUnit));
 				
 				Position pos = mUnit->getPosition();
@@ -405,7 +405,9 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 				unitsToStayNearby.insert(unit);
 			}
 			
-			unitsToStayNearby = unitsToStayNearby.getBestFittingToCircle(136); // TODO Fix constant
+                        unitsToStayNearby = unitsToStayNearby.getBestFittingToCircle(136, // TODO Fix constant
+                                                                                     BWAPI::Broodwar->getRemainingLatencyFrames() + 
+                                                                                     BWAPI::Broodwar->getLatencyFrames()); 
 			if(!unitsToStayNearby.empty())
 			{
 				Position squadLocation = unitsToStayNearby.getCenter();
