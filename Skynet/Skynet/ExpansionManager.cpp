@@ -85,13 +85,12 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
 
 			bool hasPylon = defenseType.requiresPsi() ? false : true;
 			int thisCount = 0;
-			
-			//BWAPI::UnitType defenseType
+                        int creepCount = 0;
 			
 			// Searching for defenses that were built already
 			for (Unit building : base->getBuildings())
 			{
-                                if(building->getType() == defenseType || building->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+                                if(building->getType() == defenseType)
                                         ++thisCount; // Ok
 
 				// For Protoss only
@@ -100,18 +99,42 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
 					if(building->isCompleted())
 						hasPylon = true;
 				}
+				else if (building->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+                                {
+                                        if(building->isCompleted())
+                                                creepCount++;
+                                }
 			}
 
-			if ( (myRace != BWAPI::Races::Protoss) || hasPylon)
+			if (myRace == BWAPI::Races::Zerg)
+                        {
+                                if (creepCount > 0)
+                                {
+                                        // Creeps are built, proceeding with the actual unit
+                                        defensesNeeded += neededPerBase;
+                                        defensesNeeded -= std::min(thisCount, neededPerBase);
+                                        defensesNeeded = std::max(creepCount, defensesNeeded);
+                                } else 
+                                {
+                                        // To build defence we need a creep colonies that will be morphed into actual defence type
+                                        TCreepMap::iterator iCreep = mCreepTasks.find(base);
+                                        if (iCreep == mCreepTasks.end() || !iCreep->second->hasEnded())
+                                                mCreepTasks[base] = TaskManager::Instance().build(BWAPI::UnitTypes::Zerg_Creep_Colony, TaskType::Defense);
+                                }
+                        }
+			
+			if (hasPylon)
 			{
 				defensesNeeded += neededPerBase;
 				defensesNeeded -= std::min(thisCount, neededPerBase);
 			}
 			else 
+                        {
 			    if( (myRace == BWAPI::Races::Protoss) 
 				&& BWAPI::Broodwar->self()->supplyTotal() >= 380 
 				&& (!mPylon || mPylon->hasEnded()))
 					mPylon = TaskManager::Instance().build(BWAPI::UnitTypes::Protoss_Pylon, TaskType::Defense);
+                        }
 		}
 
 		// Removing completed tasks that were ordered previously
@@ -141,7 +164,7 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
 					    (defenseType == BWAPI::UnitTypes::Zerg_Spore_Colony))
 					{
 						mDefenseTasks.push_front(TaskManager::Instance().build(defenseType, TaskType::Defense)); 
-						mDefenseTasks.push_front(TaskManager::Instance().build(BWAPI::UnitTypes::Zerg_Creep_Colony, TaskType::Defense)); 
+						//mDefenseTasks.push_front(TaskManager::Instance().build(BWAPI::UnitTypes::Zerg_Creep_Colony, TaskType::Defense)); 
 					}
 				} else
 					mDefenseTasks.push_front(TaskManager::Instance().build(defenseType, TaskType::Defense)); 

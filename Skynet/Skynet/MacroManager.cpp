@@ -454,6 +454,8 @@ bool MacroManagerClass::hasRequirements(BWAPI::TechType type)
 
 bool MacroManagerClass::hasRequirements(BWAPI::UpgradeType type, int level)
 {
+        // TODO Zerg
+        
 	if(BWAPI::Broodwar->self()->completedUnitCount(type.whatUpgrades()) == 0)
 		return false;
 
