@@ -10,7 +10,8 @@
 
 DefaultSquadTask::DefaultSquadTask(ArmyBehaviour behaviour)
 	: BaseSquadTask(behaviour)
-	, mEngageFull(false)
+	, mEngageFull(false),
+	mObserverCount(0)
 {
 }
 
@@ -270,8 +271,11 @@ bool DefaultSquadTask::waitingForUnit(Unit unit) const
 
 void DefaultSquadTask::giveUnit(Unit unit)
 {
-	if(unit->getType() == BWAPI::UnitTypes::Protoss_Observer)
-		mObserver = unit;
+	if(unit->getType() == BWAPI::UnitTypes::Protoss_Observer || unit->getType() == BWAPI::UnitTypes::Zerg_Overlord)
+        {
+		//mObserver = unit;
+                mObserverCount++;
+        }
 	
 	mUnits.insert(unit);
 
@@ -285,8 +289,12 @@ void DefaultSquadTask::returnUnit(Unit unit)
 	mUnitBehaviours[unit].onDeleted();
 	mUnitBehaviours.erase(unit);
 
-	if(unit == mObserver)
-		mObserver = StaticUnits::nullunit;
+        if(unit->getType() == BWAPI::UnitTypes::Protoss_Observer || unit->getType() == BWAPI::UnitTypes::Zerg_Overlord)
+//	if(unit == mObserver)
+        {
+                mObserverCount--;
+		//mObserver = StaticUnits::nullunit;
+        }
 }
 
 bool DefaultSquadTask::morph(Unit unit, BWAPI::UnitType previousType)
@@ -338,16 +346,18 @@ void DefaultSquadTask::updateRequirements()
 			addRequirement(req);
 		}
 
-		if(!mObserver)
+		if(mObserverCount < 7)
 		{
 			RequirementGroup req;
 
 			if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Protoss)
 			    req.addUnitFilterRequirement(20, Requirement::maxTime, UnitFilter(BWAPI::UnitTypes::Protoss_Observer) && UnitFilter(UnitFilterFlags::IsComplete));
-			
-			// FIXME Currently it grabs all available overlords not letting them to scout
-//			else if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
-//			    req.addUnitFilterRequirement(20, Requirement::maxTime, UnitFilter(BWAPI::UnitTypes::Zerg_Overlord) && UnitFilter(UnitFilterFlags::IsComplete));
+			else if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+			    req.addUnitFilterRequirement(
+                                    20, Requirement::maxTime, 
+                                    UnitFilter(BWAPI::UnitTypes::Zerg_Overlord) && UnitFilter(UnitFilterFlags::IsComplete),
+                                    (mUnits.size() / 25) + 1
+                                );
 
 			addRequirement(req);
 		}
