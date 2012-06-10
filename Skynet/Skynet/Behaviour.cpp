@@ -87,8 +87,6 @@ void Behaviour::createDefaultActions()
 		mMicroActions.push_back(MicroAction(new ArconZealotKillUnDetected(mUnit)));
 	}
 
-	targetPriorities.push_back(firstTargets);
-
 	if(unitType.isDetector())
 		mMicroActions.push_back(MicroAction(new DetectorAction(mUnit)));
 
@@ -104,9 +102,6 @@ void Behaviour::createDefaultActions()
 	if(unitType == BWAPI::UnitTypes::Protoss_Zealot || unitType == BWAPI::UnitTypes::Zerg_Zergling)
 		mMicroActions.push_back(MicroAction(new MineDragAction(mUnit)));
 
-	mMicroActions.push_back(MicroAction(new BasicUnitAction(mUnit, targetPriorities)));
-	mMicroActions.push_back(MicroAction(new GoalAction(mUnit)));
-	
 	// Zerg part
 	if (unitType == BWAPI::UnitTypes::Zerg_Zergling || 
 	    unitType == BWAPI::UnitTypes::Zerg_Hydralisk || 
@@ -114,6 +109,7 @@ void Behaviour::createDefaultActions()
 	{
 		firstTargets.insert(BWAPI::UnitTypes::Protoss_High_Templar);
 		firstTargets.insert(BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode);
+		firstTargets.insert(BWAPI::UnitTypes::Protoss_Dark_Archon);
 	}
  
 	if (unitType == BWAPI::UnitTypes::Zerg_Scourge) 
@@ -121,5 +117,9 @@ void Behaviour::createDefaultActions()
 	
 	if (unitType == BWAPI::UnitTypes::Zerg_Queen) 
 		mMicroActions.push_back(MicroAction(new QueenAction(mUnit)));
+	
+	targetPriorities.push_back(firstTargets);
+	mMicroActions.push_back(MicroAction(new BasicUnitAction(mUnit, targetPriorities)));
+	mMicroActions.push_back(MicroAction(new GoalAction(mUnit)));
 	
 }

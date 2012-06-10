@@ -279,7 +279,7 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 		}
 	}
 	
-	return true;
+	return false;
 }
 
 // Defined in BasicUnitAction.cpp. 
@@ -319,46 +319,79 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 	if (!engaged) 
 	{
 		// Need to be close to our units, but still not too close to the enemy
-		int maxRange = 0;
-		Unit sniperUnit;
+		int minEffectiveRange = std::numeric_limits<int>::max();
+		Unit closestThreat;
+		int  threatWeaponRange = 0;
+		
+		// TODO Keep away from sniper units and from unit that is targeted and  may attack us 
+// 		UnitGroup targettingUnits = UnitInformation::Instance().getUnitsTargetting(mUnit);
+		
 		for (Unit enemy : allEnemies) 
 		{
-			if (mUnit->getDistance(enemy) > 300) // TODO constant
+			if (mUnit->getDistance(enemy) > 1000) // TODO constant
 			      continue; // this unit is too far away to be afraid of
 
 			BWAPI::UnitType type = enemy->getType();
-			int currentRange = 0; 
+			int enemyWeaponRange = 0; 
 			if (type.isSpellcaster()) {
 				// Selecting the most deadliest spell
 				if (type == BWAPI::UnitTypes::Protoss_Dark_Archon)
-					currentRange = BWAPI::TechTypes::Feedback.getWeapon().maxRange();
+					enemyWeaponRange = BWAPI::TechTypes::Feedback.getWeapon().maxRange();
 				else if (type == BWAPI::UnitTypes::Protoss_High_Templar)
-					currentRange = BWAPI::TechTypes::Psionic_Storm.getWeapon().maxRange();
+					enemyWeaponRange = BWAPI::TechTypes::Psionic_Storm.getWeapon().maxRange();
 				else if (type == BWAPI::UnitTypes::Terran_Science_Vessel)
-					currentRange = BWAPI::TechTypes::Irradiate.getWeapon().maxRange();
+					enemyWeaponRange = BWAPI::TechTypes::Irradiate.getWeapon().maxRange();
 				else if (type == BWAPI::UnitTypes::Zerg_Defiler)
-					currentRange = BWAPI::TechTypes::Plague.getWeapon().maxRange();
+					enemyWeaponRange = BWAPI::TechTypes::Plague.getWeapon().maxRange();
 				else if (type == BWAPI::UnitTypes::Terran_Ghost)
-					currentRange = BWAPI::TechTypes::Lockdown.getWeapon().maxRange();
+					enemyWeaponRange = BWAPI::TechTypes::Lockdown.getWeapon().maxRange();
 				else // some spellcasters may still be a war unit (eg. Terran Ghost)
-					currentRange = enemy->getWeaponMaxRange(mUnit);
+					enemyWeaponRange = enemy->getWeaponMaxRange(mUnit);
 			} else
-				currentRange = enemy->getWeaponMaxRange(mUnit);
+				enemyWeaponRange = enemy->getWeaponMaxRange(mUnit);
 			      
-			if (currentRange > maxRange)
+			int distanceToEnemy = mUnit->getDistance(enemy); // FIXME getRemainingLatencyFrames ?
+			
+			// currentRange may be negative if mUnit is in the firing range of an enemy
+			int currentRange = distanceToEnemy - enemyWeaponRange; 
+			
+			// Additional coefficient to afraid units that are targeted us
+			// TODO Modify depending on current squad action (attack/hold/retreat)
+			if (enemy->getTarget() == mUnit) 
+			      currentRange -= 50; // TODO constant
+			
+			if (currentRange < minEffectiveRange)
 			{
-				maxRange = currentRange;
-				sniperUnit = enemy;
+				closestThreat = enemy;
+				minEffectiveRange = currentRange;
+				threatWeaponRange = enemyWeaponRange;
 			}
 		}
 		
-		if (sniperUnit && (mUnit->getDistance(sniperUnit) < maxRange + 25))
+		if (closestThreat)
 		{
-			// We're too close to enemy. Running away
-			stayAtRange(mUnit, 
-				    sniperUnit->getPosition(), 
-				    maxRange + 64, 
-				    sniperUnit->getDistance(mUnit));
+			if (minEffectiveRange < 128)
+			{
+				// We're under attack! Move move move!
+				stayAtRange(mUnit, 
+					    closestThreat->getPosition(), 
+					    threatWeaponRange + 128, 
+					    closestThreat->getDistance(mUnit));
+				
+				Position pos = mUnit->getPosition();
+				Position threat = closestThreat->getPosition();
+				
+				BWAPI::Broodwar->drawLine(
+					BWAPI::CoordinateType::Map, 
+					pos.x(), pos.y(), 
+					threat.x(), threat.y(), 
+					BWAPI::Broodwar->self()->getColor());
+				
+				BWAPI::Broodwar->drawTextMap(
+					pos.x() + BWAPI::UnitTypes::Zerg_Queen.dimensionRight(), 
+					pos.y() + 60, 
+					"Runing away");
+			}
 			return true;
 		} else {
 			// Enemies are not so close. We may hold our group
@@ -371,7 +404,7 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 				if(unit->getType() == BWAPI::UnitTypes::Zerg_Queen || unit->getType().isBuilding())
 					continue;
 
-				if(mUnit->getDistance(unit) > 250) // TODO What constant should we use?
+				if(mUnit->getDistance(unit) > 1000) // TODO What constant should we use?
 					continue;
 
 				unitsToStayNearby.insert(unit);
@@ -384,17 +417,58 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 				if(mUnit->getDistance(squadLocation) > 300)
 				{
 					mUnit->move(squadLocation, 256); // TODO Fix constant
+					
+					Position pos = mUnit->getPosition();
+					BWAPI::Broodwar->drawLine(
+						BWAPI::CoordinateType::Map, 
+						pos.x(), pos.y(), 
+						squadLocation.x(), squadLocation.y(), 
+						BWAPI::Broodwar->self()->getColor());
+					
+					BWAPI::Broodwar->drawTextMap(
+						pos.x() + BWAPI::UnitTypes::Zerg_Queen.dimensionRight(), 
+						pos.y() + 60, 
+						"Nearby move");
+					
 					return true;
 				}
 			}
 			else 
 			{
 				// If noone is nearby, then go to the goal target position
-				mUnit->move(squadGoal.getPosition());
+				Position target = squadGoal.getPosition();
+				mUnit->move(target);
+				
+				Position pos = mUnit->getPosition();
+				BWAPI::Broodwar->drawLine(
+					BWAPI::CoordinateType::Map, 
+					pos.x(), pos.y(), 
+					target.x(), target.y(), 
+					BWAPI::Broodwar->self()->getColor());
+				
+				BWAPI::Broodwar->drawTextMap(
+					pos.x() + BWAPI::UnitTypes::Zerg_Queen.dimensionRight(), 
+					pos.y() + 60, 
+					"Fallback move");
 				return true;
 			}
 		}
+	} else {
+		Position pos = mUnit->getPosition();
+		Position target = mUnit->getTarget()->getPosition();
+		
+		BWAPI::Broodwar->drawLine(
+			BWAPI::CoordinateType::Map, 
+			pos.x(), pos.y(), 
+			target.x(), target.y(), 
+			BWAPI::Broodwar->self()->getColor());
+		
+		BWAPI::Broodwar->drawTextMap(
+			pos.x() + BWAPI::UnitTypes::Zerg_Queen.dimensionRight(), 
+			pos.y() + 60, 
+			"Spell engaged!");
 	}
+	
 	
 	return engaged;
 }

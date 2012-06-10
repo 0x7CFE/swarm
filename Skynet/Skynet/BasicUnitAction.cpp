@@ -272,15 +272,6 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 		return true;
 	}
 
-	if ( (BWAPI::Broodwar->getFrameCount() - mUnit->getLastOrderExecuteTime() > 4 * 24) 
-	      && mUnit->getType().isBurrowable() && mUnit->isIdle() && !mUnit->isBurrowed())
-	{
-		mUnit->burrow();
-		return true;
-	} else 
-		return false;
-	
-	
 	if (BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing))
 	{
 		if ( (BWAPI::Broodwar->getFrameCount() - mUnit->getLastOrderExecuteTime() > 3 * 24) 
