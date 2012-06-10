@@ -64,7 +64,8 @@ void ExpansionManagerClass::updateRefineries()
 
 void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neededPerBase)
 {
-	if(!MacroManager::Instance().hasRequirements(defenseType))
+	// FIXME What actual condition should be here?
+        if(!MacroManager::Instance().hasRequirements(defenseType) && BWAPI::Broodwar->self()->getRace() != BWAPI::Races::Zerg)
 		return;
 
 	const BWAPI::Race& myRace = BWAPI::Broodwar->self()->getRace();
@@ -90,12 +91,8 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
 			// Searching for defenses that were built already
 			for (Unit building : base->getBuildings())
 			{
-// 				if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
-// 					if(building->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony || building->getType() == defenseType)
-// 						++thisCount; // Ok
-// 				else
-					if(building->getType() == defenseType || building->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
-						++thisCount; // Ok
+                                if(building->getType() == defenseType || building->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+                                        ++thisCount; // Ok
 
 				// For Protoss only
 				if(building->getType() == BWAPI::UnitTypes::Protoss_Pylon)
@@ -177,6 +174,7 @@ void ExpansionManagerClass::updateDefense()
 	    case BWAPI::Races::Zerg.getID(): 
 		// FIXME Count of defense structures should be calculated
 		//       depending on the amount of base' chokepoints
+//                 updateDefense(BWAPI::UnitTypes::Zerg_Creep_Colony, 4);
 		updateDefense(BWAPI::UnitTypes::Zerg_Sunken_Colony, 3);
 		updateDefense(BWAPI::UnitTypes::Zerg_Spore_Colony, 1);
 		break;

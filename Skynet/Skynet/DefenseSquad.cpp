@@ -223,7 +223,7 @@ void DefenseSquadTask::updateRequirements()
 		canAttackGroundNeeded -= (int(mWorkerDefenders.size()) / 2);
 
 		// Get as many as we can for now
-		// TODO: maybe check if its our only mining base or do something better
+		// TODO: check if its our only mining base or do something better
 		for(int i = 0; i < workersNeeded; ++i)
 		{
 			RequirementGroup reqWorkers;
@@ -233,7 +233,8 @@ void DefenseSquadTask::updateRequirements()
 
 		// Temp till defense squad is good enough to use army units and not just workers
 		// in the below state can cause the bots army to get too seperated and cause the main army to get possibly destroyed engaging a group elsewhere
-		return;
+                if (BWAPI::Broodwar->self()->getRace() != BWAPI::Races::Zerg)
+                        return;
 
 		RequirementGroup reqMain;
 		if(canAttackGroundNeeded > 0)
@@ -244,7 +245,13 @@ void DefenseSquadTask::updateRequirements()
 			reqMain.addUnitFilterRequirement(30, Requirement::maxTime, UnitFilter(UnitFilterFlags::type(UnitFilterFlags::IsArmyUnit | UnitFilterFlags::CanAttackAir | UnitFilterFlags::IsComplete)), canAttackAirNeeded, mDefenseGoal.getBase()->getCenterLocation());
 
 		if(!mObserver && needsDetection)
-			reqMain.addUnitFilterRequirement(30, Requirement::maxTime, UnitFilter(BWAPI::UnitTypes::Protoss_Observer) && UnitFilter(UnitFilterFlags::IsComplete), mDefenseGoal.getBase()->getCenterLocation());
+                {
+                        // TODO What about spore colony?
+                        if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+                                reqMain.addUnitFilterRequirement(30, Requirement::maxTime, UnitFilter(BWAPI::UnitTypes::Zerg_Overlord) && UnitFilter(UnitFilterFlags::IsComplete), mDefenseGoal.getBase()->getCenterLocation());
+                        else if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Protoss)
+                                reqMain.addUnitFilterRequirement(30, Requirement::maxTime, UnitFilter(BWAPI::UnitTypes::Protoss_Observer) && UnitFilter(UnitFilterFlags::IsComplete), mDefenseGoal.getBase()->getCenterLocation());
+                }
 
 		addRequirement(reqMain);
 
