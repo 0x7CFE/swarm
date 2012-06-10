@@ -38,7 +38,8 @@ private:
 	UnitGroup mUnits;
 	std::map<Unit, Behaviour> mUnitBehaviours;
 
-	Unit mObserver;
+	//Unit mObserver;
+        int mObserverCount;
 
 	Goal mLastGoal;
 	bool mEngageFull;
