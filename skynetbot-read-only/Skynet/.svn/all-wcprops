@@ -1,0 +1,1025 @@
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/svn/!svn/ver/14/trunk/Skynet
+END
+Behaviour.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/Behaviour.cpp
+END
+Goal.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/7/trunk/Skynet/Goal.h
+END
+DrawBuffer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/DrawBuffer.cpp
+END
+TrainScarabAction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/7/trunk/Skynet/TrainScarabAction.cpp
+END
+UnitInformation.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/UnitInformation.h
+END
+BuildOrderManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/7/trunk/Skynet/BuildOrderManager.h
+END
+LoadTerranBuilds.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/7/trunk/Skynet/LoadTerranBuilds.cpp
+END
+BufferedDot.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/BufferedDot.h
+END
+PylonPowerTracker.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/7/trunk/Skynet/PylonPowerTracker.h
+END
+RegionPath.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/RegionPath.cpp
+END
+BufferedBox.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/BufferedBox.h
+END
+TaskPump.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/TaskPump.cpp
+END
+ExpansionManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/ExpansionManager.h
+END
+BufferedEllipse.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/BufferedEllipse.h
+END
+BlockedPathManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/7/trunk/Skynet/BlockedPathManager.cpp
+END
+MapHelper.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/12/trunk/Skynet/MapHelper.cpp
+END
+MorphTask.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/7/trunk/Skynet/MorphTask.h
+END
+Logger.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/Skynet/Logger.h
+END
+LoadOtherBuilds.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/7/trunk/Skynet/LoadOtherBuilds.cpp
+END
+UnitInformation.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/7/trunk/Skynet/UnitInformation.cpp
+END
+PositionPath.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/PositionPath.h
+END
+Behaviour.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/7/trunk/Skynet/Behaviour.h
+END
+UnitFilter.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/UnitFilter.h
+END
+Condition.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/10/trunk/Skynet/Condition.h
+END
+SupplyManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/SupplyManager.h
+END
+Skynet.vcproj
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/13/trunk/Skynet/Skynet.vcproj
+END
+UnitTracker.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/UnitTracker.h
+END
+WalkPositionPath.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/7/trunk/Skynet/WalkPositionPath.cpp
+END
+BuildOrder.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/BuildOrder.h
+END
+GameProgressDetection.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/7/trunk/Skynet/GameProgressDetection.h
+END
+DropAction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/DropAction.cpp
+END
+RegionPath.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/RegionPath.h
+END
+BufferedItem.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/BufferedItem.h
+END
+ArconZealotKillUnDetected.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/7/trunk/Skynet/ArconZealotKillUnDetected.h
+END
+Vector.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/Skynet/Vector.h
+END
+TaskPump.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/7/trunk/Skynet/TaskPump.h
+END
+Base.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/Skynet/Base.cpp
+END
+WorkerScoutTask.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/11/trunk/Skynet/WorkerScoutTask.h
+END
+GoalAction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/GoalAction.cpp
+END
+PositionPath.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/PositionPath.cpp
+END
+Region.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/7/trunk/Skynet/Region.cpp
+END
+BuildingPlacer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/BuildingPlacer.cpp
+END
+UnitFilter.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/UnitFilter.cpp
+END
+ArbiterAction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/ArbiterAction.cpp
+END
+BuildTilePath.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/BuildTilePath.cpp
+END
+DrawingHelper.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/DrawingHelper.cpp
+END
+BaseTracker.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/BaseTracker.h
+END
+ScoutData.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/7/trunk/Skynet/ScoutData.h
+END
+GameProgressDetection.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/7/trunk/Skynet/GameProgressDetection.cpp
+END
+WalkPositionPath.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/WalkPositionPath.h
+END
+Chokepoint.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/Chokepoint.h
+END
+ReservedLocation.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/7/trunk/Skynet/ReservedLocation.cpp
+END
+BufferedCircle.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/BufferedCircle.h
+END
+UpgradeTask.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/UpgradeTask.cpp
+END
+TechTask.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/7/trunk/Skynet/TechTask.h
+END
+LoadProtossBuilds.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/10/trunk/Skynet/LoadProtossBuilds.cpp
+END
+AOEThreat.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/AOEThreat.cpp
+END
+DefenseSquad.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/DefenseSquad.h
+END
+Goal.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/Skynet/Goal.cpp
+END
+Unit.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/7/trunk/Skynet/Unit.h
+END
+PathFinder.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/12/trunk/Skynet/PathFinder.cpp
+END
+GoalAction.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/GoalAction.h
+END
+BuildOrderManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/7/trunk/Skynet/BuildOrderManager.cpp
+END
+DefaultSquad.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/DefaultSquad.h
+END
+BuildingPlacer.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/BuildingPlacer.h
+END
+PylonPowerTracker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/7/trunk/Skynet/PylonPowerTracker.cpp
+END
+UnitPredictor.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/UnitPredictor.cpp
+END
+UnitGroup.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/8/trunk/Skynet/UnitGroup.cpp
+END
+TerrainAnaysis.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/14/trunk/Skynet/TerrainAnaysis.cpp
+END
+TrainScarabAction.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/7/trunk/Skynet/TrainScarabAction.h
+END
+DrawBuffer.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/DrawBuffer.h
+END
+IdleTask.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/IdleTask.cpp
+END
+TrainTask.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/TrainTask.cpp
+END
+DetectorAction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/8/trunk/Skynet/DetectorAction.cpp
+END
+Singleton.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/3/trunk/Skynet/Singleton.h
+END
+RectangleArray.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/RectangleArray.h
+END
+MicroAction.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/MicroAction.h
+END
+ReservedLocation.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/ReservedLocation.h
+END
+UnitHelper.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/UnitHelper.cpp
+END
+BasicUnitAction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/7/trunk/Skynet/BasicUnitAction.cpp
+END
+BlockedPathManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/7/trunk/Skynet/BlockedPathManager.h
+END
+AOEThreat.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/7/trunk/Skynet/AOEThreat.h
+END
+RequirementGroup.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/RequirementGroup.h
+END
+PsiStormAction.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/PsiStormAction.h
+END
+Condition.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/10/trunk/Skynet/Condition.cpp
+END
+AdvancedGroup.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/AdvancedGroup.h
+END
+ResourceManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/ResourceManager.h
+END
+ScoutManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/11/trunk/Skynet/ScoutManager.cpp
+END
+AOEThreatTracker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/7/trunk/Skynet/AOEThreatTracker.cpp
+END
+ObserverScoutTask.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/7/trunk/Skynet/ObserverScoutTask.cpp
+END
+PathFinder.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/PathFinder.h
+END
+BufferedText.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/BufferedText.h
+END
+MineBlockingMineralTask.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/7/trunk/Skynet/MineBlockingMineralTask.cpp
+END
+Requirement.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/Requirement.cpp
+END
+UnitGroup.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/8/trunk/Skynet/UnitGroup.h
+END
+TerrainAnaysis.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/14/trunk/Skynet/TerrainAnaysis.h
+END
+ArconZealotKillUnDetected.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/7/trunk/Skynet/ArconZealotKillUnDetected.cpp
+END
+ResourceTracker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/7/trunk/Skynet/ResourceTracker.cpp
+END
+IdleTask.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/7/trunk/Skynet/IdleTask.h
+END
+Interface.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/7/trunk/Skynet/Interface.h
+END
+TrainTask.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/7/trunk/Skynet/TrainTask.h
+END
+BorderPosition.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/BorderPosition.h
+END
+LoadZergBuilds.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/LoadZergBuilds.cpp
+END
+WorkerScoutTask.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/12/trunk/Skynet/WorkerScoutTask.cpp
+END
+LatencyTracker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/LatencyTracker.cpp
+END
+WallTracker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/WallTracker.cpp
+END
+RequirementGroup.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/7/trunk/Skynet/RequirementGroup.cpp
+END
+Heap.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/7/trunk/Skynet/Heap.h
+END
+Skynet.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/Skynet/Skynet.h
+END
+BaseTracker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/BaseTracker.cpp
+END
+Region.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/Skynet/Region.h
+END
+ScoutManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/ScoutManager.h
+END
+AOEThreatTracker.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/AOEThreatTracker.h
+END
+ObserverScoutTask.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/7/trunk/Skynet/ObserverScoutTask.h
+END
+ExpansionManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/7/trunk/Skynet/ExpansionManager.cpp
+END
+DrawingHelper.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/DrawingHelper.h
+END
+MineBlockingMineralTask.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/7/trunk/Skynet/MineBlockingMineralTask.h
+END
+TaskManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/TaskManager.h
+END
+Requirement.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/Requirement.h
+END
+TechTask.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/TechTask.cpp
+END
+Task.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/7/trunk/Skynet/Task.h
+END
+PlayerTracker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/11/trunk/Skynet/PlayerTracker.cpp
+END
+SquadManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/SquadManager.cpp
+END
+BaseSquad.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/7/trunk/Skynet/BaseSquad.h
+END
+BufferedTriangle.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/BufferedTriangle.h
+END
+Skynet.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/14/trunk/Skynet/Skynet.cpp
+END
+DefaultSquad.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/14/trunk/Skynet/DefaultSquad.cpp
+END
+MineDragAction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/MineDragAction.cpp
+END
+SupplyManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/SupplyManager.cpp
+END
+WalkPosition.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/WalkPosition.h
+END
+UnitTracker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/10/trunk/Skynet/UnitTracker.cpp
+END
+BuildOrder.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/BuildOrder.cpp
+END
+MacroManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/MacroManager.cpp
+END
+TaskManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/TaskManager.cpp
+END
+BorderTracker.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/BorderTracker.h
+END
+UnitPredictor.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/UnitPredictor.h
+END
+GatherTask.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/GatherTask.h
+END
+DropAction.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/DropAction.h
+END
+TypeSafeEnum.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/TypeSafeEnum.h
+END
+DetectorAction.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/DetectorAction.h
+END
+PlayerTracker.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/PlayerTracker.h
+END
+SquadManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/SquadManager.h
+END
+PsiStormAction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/PsiStormAction.cpp
+END
+Base.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/7/trunk/Skynet/Base.h
+END
+ResourceManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/14/trunk/Skynet/ResourceManager.cpp
+END
+AdvancedGroup.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/AdvancedGroup.cpp
+END
+ConstructionTask.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/ConstructionTask.h
+END
+UnitHelper.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/7/trunk/Skynet/UnitHelper.h
+END
+BasicUnitAction.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/BasicUnitAction.h
+END
+ScoutData.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/ScoutData.cpp
+END
+MineDragAction.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/MineDragAction.h
+END
+BorderTracker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/BorderTracker.cpp
+END
+ArbiterAction.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/ArbiterAction.h
+END
+GatherTask.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/GatherTask.cpp
+END
+BufferedLine.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/BufferedLine.h
+END
+BuildTilePath.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/7/trunk/Skynet/BuildTilePath.h
+END
+MacroManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/MacroManager.h
+END
+OperatorType.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/OperatorType.h
+END
+BorderPosition.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/7/trunk/Skynet/BorderPosition.cpp
+END
+Chokepoint.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/Skynet/Chokepoint.cpp
+END
+DefenseSquad.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/DefenseSquad.cpp
+END
+MorphTask.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/MorphTask.cpp
+END
+ResourceTracker.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/7/trunk/Skynet/ResourceTracker.h
+END
+DLL.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/7/trunk/Skynet/DLL.cpp
+END
+ConstructionTask.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/7/trunk/Skynet/ConstructionTask.cpp
+END
+Unit.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/11/trunk/Skynet/Unit.cpp
+END
+UpgradeTask.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/UpgradeTask.h
+END
+LatencyTracker.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/7/trunk/Skynet/LatencyTracker.h
+END
+WallTracker.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/7/trunk/Skynet/WallTracker.h
+END
+MapHelper.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/7/trunk/Skynet/MapHelper.h
+END

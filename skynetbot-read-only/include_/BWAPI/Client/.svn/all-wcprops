@@ -1,0 +1,125 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/13/trunk/include/BWAPI/Client
+END
+BulletImpl.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/2/trunk/include/BWAPI/Client/BulletImpl.h
+END
+UnitData.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/UnitData.h
+END
+RegionData.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/RegionData.h
+END
+Command.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/2/trunk/include/BWAPI/Client/Command.h
+END
+PlayerImpl.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/PlayerImpl.h
+END
+UnitCommand.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/2/trunk/include/BWAPI/Client/UnitCommand.h
+END
+Client.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/Client.h
+END
+ForceImpl.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/2/trunk/include/BWAPI/Client/ForceImpl.h
+END
+CommandType.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/CommandType.h
+END
+GameTable.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/GameTable.h
+END
+BulletData.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/2/trunk/include/BWAPI/Client/BulletData.h
+END
+Event.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/2/trunk/include/BWAPI/Client/Event.h
+END
+PlayerData.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/PlayerData.h
+END
+ForceData.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/2/trunk/include/BWAPI/Client/ForceData.h
+END
+GameImpl.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/GameImpl.h
+END
+Shape.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/Shape.h
+END
+UnitImpl.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/UnitImpl.h
+END
+ShapeType.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/2/trunk/include/BWAPI/Client/ShapeType.h
+END
+GameData.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/13/trunk/include/BWAPI/Client/GameData.h
+END
+RegionImpl.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/9/trunk/include/BWAPI/Client/RegionImpl.h
+END
