@@ -5,12 +5,13 @@ const int StasisRadius = 96;
 
 void LatencyTrackerClass::update()
 {
+        const int currentTime = BWAPI::Broodwar->getFrameCount();
+        
         if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Protoss)
         {
-                const int time = BWAPI::Broodwar->getFrameCount();
                 for(std::map<Unit, std::pair<Position, int>>::iterator it = mStormedPositions.begin(); it != mStormedPositions.end();)
                 {
-                        if(!it->first->exists() || (it->first->getOrder() != BWAPI::Orders::CastPsionicStorm && time > it->second.second))
+                        if(!it->first->exists() || (it->first->getOrder() != BWAPI::Orders::CastPsionicStorm && currentTime > it->second.second))
                                 mStormedPositions.erase(it++);
                         else
                                 ++it;
@@ -18,28 +19,32 @@ void LatencyTrackerClass::update()
 
                 for(std::map<Unit, std::pair<Position, int>>::iterator it = mStasisPositions.begin(); it != mStasisPositions.end();)
                 {
-                        if(!it->first->exists() || (it->first->getOrder() != BWAPI::Orders::CastStasisField && time > it->second.second))
+                        if(!it->first->exists() || (it->first->getOrder() != BWAPI::Orders::CastStasisField && currentTime > it->second.second))
                                 mStasisPositions.erase(it++);
                         else
                                 ++it;
                 }
         } else if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
         {
-                for (std::map<Unit, Unit>::iterator iBroodling = mPendingBroodlings.begin(); iBroodling != mPendingBroodlings.end(); )
+                for (std::map<Unit, std::pair<Unit, int>>::iterator iBroodling = mPendingBroodlings.begin(); iBroodling != mPendingBroodlings.end(); )
                 {
-                        if (!iBroodling->first->exists() || (iBroodling->first->getOrder() != BWAPI::Orders::CastSpawnBroodlings))
+                        int timeWhenCasted = iBroodling->second.second;
+                        if (!iBroodling->first->exists() || (iBroodling->first->getOrder() != BWAPI::Orders::CastSpawnBroodlings && currentTime > timeWhenCasted))
                         {
-                                mBroodlingVictims.erase(iBroodling->second);
+                                Unit target = iBroodling->second.first;
+                                mBroodlingVictims.erase(target);
                                 mPendingBroodlings.erase(iBroodling++);
                         } else
                                 ++iBroodling;
                 }
                 
-                for (std::map<Unit, Unit>::iterator iParasite = mPendingParasites.begin(); iParasite != mPendingParasites.end(); )
+                for (std::map<Unit, std::pair<Unit, int>>::iterator iParasite = mPendingParasites.begin(); iParasite != mPendingParasites.end(); )
                 {
-                        if (!iParasite->first->exists() || (iParasite->first->getOrder() != BWAPI::Orders::CastParasite))
+                        int timeWhenCasted = iParasite->second.second;
+                        if (!iParasite->first->exists() || (iParasite->first->getOrder() != BWAPI::Orders::CastParasite && currentTime > timeWhenCasted))
                         {
-                                mParasiteVictims.erase(iParasite->second);
+                                Unit target = iParasite->second.first;
+                                mParasiteVictims.erase(target);
                                 mPendingParasites.erase(iParasite++);
                         } else
                                 ++iParasite;
@@ -90,12 +95,12 @@ void LatencyTrackerClass::placingEnsnare ( Unit who, Position where ) {
 }
 
 void LatencyTrackerClass::placingBroodlings ( Unit who, Unit target ) {
-        mPendingBroodlings[who] = target;
+        mPendingBroodlings[who] = std::make_pair(target, BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames());
         mBroodlingVictims.insert(target);
 }
 
 void LatencyTrackerClass::placingParasite ( Unit who, Unit target ) {
-        mPendingParasites[who] = target;
+        mPendingParasites[who] = std::make_pair(target, BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames());
         mParasiteVictims.insert(target);
 }
 
