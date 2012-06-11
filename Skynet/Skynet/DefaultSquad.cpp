@@ -290,11 +290,7 @@ void DefaultSquadTask::returnUnit(Unit unit)
 	mUnitBehaviours.erase(unit);
 
         if(unit->getType() == BWAPI::UnitTypes::Protoss_Observer || unit->getType() == BWAPI::UnitTypes::Zerg_Overlord)
-//	if(unit == mObserver)
-        {
                 mObserverCount--;
-		//mObserver = StaticUnits::nullunit;
-        }
 }
 
 bool DefaultSquadTask::morph(Unit unit, BWAPI::UnitType previousType)
@@ -346,7 +342,7 @@ void DefaultSquadTask::updateRequirements()
 			addRequirement(req);
 		}
 
-		if(mObserverCount < 7)
+		if( ( mObserverCount < mUnits.size() / 25) + 1)
 		{
 			RequirementGroup req;
 
@@ -355,8 +351,8 @@ void DefaultSquadTask::updateRequirements()
 			else if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
 			    req.addUnitFilterRequirement(
                                     20, Requirement::maxTime, 
-                                    UnitFilter(BWAPI::UnitTypes::Zerg_Overlord) && UnitFilter(UnitFilterFlags::IsComplete),
-                                    (mUnits.size() / 25) + 1
+                                    UnitFilter(BWAPI::UnitTypes::Zerg_Overlord) && UnitFilter(UnitFilterFlags::IsComplete)
+                                    //,(mUnits.size() / 25) + 1
                                 );
 
 			addRequirement(req);
