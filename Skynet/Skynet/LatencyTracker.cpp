@@ -25,7 +25,7 @@ void LatencyTrackerClass::update()
                 }
         } else if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
         {
-                for (std::map<Unit, Unit>::iterator iBroodling = mPendingBroodlings.begin(); iBroodling != mPendingBroodlings.end(); ++iBroodling)
+                for (std::map<Unit, Unit>::iterator iBroodling = mPendingBroodlings.begin(); iBroodling != mPendingBroodlings.end(); )
                 {
                         if (!iBroodling->first->exists() || (iBroodling->first->getOrder() != BWAPI::Orders::CastSpawnBroodlings))
                         {
@@ -35,7 +35,7 @@ void LatencyTrackerClass::update()
                                 ++iBroodling;
                 }
                 
-                for (std::map<Unit, Unit>::iterator iParasite = mPendingParasites.begin(); iParasite != mPendingParasites.end(); ++iParasite)
+                for (std::map<Unit, Unit>::iterator iParasite = mPendingParasites.begin(); iParasite != mPendingParasites.end(); )
                 {
                         if (!iParasite->first->exists() || (iParasite->first->getOrder() != BWAPI::Orders::CastParasite))
                         {
