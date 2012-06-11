@@ -1,0 +1,215 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/13/trunk/include/BWAPI
+END
+Color.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/9/trunk/include/BWAPI/Color.h
+END
+UnitCommandType.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/9/trunk/include/BWAPI/UnitCommandType.h
+END
+Event.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/13/trunk/include/BWAPI/Event.h
+END
+UnitType.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/9/trunk/include/BWAPI/UnitType.h
+END
+TechType.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/9/trunk/include/BWAPI/TechType.h
+END
+Bullet.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/9/trunk/include/BWAPI/Bullet.h
+END
+TournamentAction.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/5/trunk/include/BWAPI/TournamentAction.h
+END
+PlayerType.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/9/trunk/include/BWAPI/PlayerType.h
+END
+Position.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/5/trunk/include/BWAPI/Position.h
+END
+Flag.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/2/trunk/include/BWAPI/Flag.h
+END
+Race.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/9/trunk/include/BWAPI/Race.h
+END
+GameType.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/9/trunk/include/BWAPI/GameType.h
+END
+Order.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/9/trunk/include/BWAPI/Order.h
+END
+Constants.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/5/trunk/include/BWAPI/Constants.h
+END
+UnitCommand.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/5/trunk/include/BWAPI/UnitCommand.h
+END
+Client.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/9/trunk/include/BWAPI/Client.h
+END
+Unit.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/9/trunk/include/BWAPI/Unit.h
+END
+DamageType.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/9/trunk/include/BWAPI/DamageType.h
+END
+Type.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/9/trunk/include/BWAPI/Type.h
+END
+ExplosionType.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/9/trunk/include/BWAPI/ExplosionType.h
+END
+TilePosition.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/5/trunk/include/BWAPI/TilePosition.h
+END
+Region.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/9/trunk/include/BWAPI/Region.h
+END
+EventType.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/13/trunk/include/BWAPI/EventType.h
+END
+CoordinateType.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/2/trunk/include/BWAPI/CoordinateType.h
+END
+Error.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/9/trunk/include/BWAPI/Error.h
+END
+UpgradeType.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/9/trunk/include/BWAPI/UpgradeType.h
+END
+BulletType.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/9/trunk/include/BWAPI/BulletType.h
+END
+WeaponType.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/9/trunk/include/BWAPI/WeaponType.h
+END
+Player.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/9/trunk/include/BWAPI/Player.h
+END
+Force.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/9/trunk/include/BWAPI/Force.h
+END
+Latency.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/2/trunk/include/BWAPI/Latency.h
+END
+AIModule.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/13/trunk/include/BWAPI/AIModule.h
+END
+Input.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/9/trunk/include/BWAPI/Input.h
+END
+Game.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/9/trunk/include/BWAPI/Game.h
+END
+UnitSizeType.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/9/trunk/include/BWAPI/UnitSizeType.h
+END
