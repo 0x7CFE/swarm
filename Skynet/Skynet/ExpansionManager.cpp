@@ -106,25 +106,20 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
                                 }
 			}
 
-			if (myRace == BWAPI::Races::Zerg)
+			if (myRace == BWAPI::Races::Zerg && thisCount < neededPerBase)
                         {
-                                if (creepCount > 0)
-                                {
-                                        // Creeps are built, proceeding with the actual unit
-                                        defensesNeeded += neededPerBase;
-                                        defensesNeeded -= std::min(thisCount, neededPerBase);
-                                        defensesNeeded = std::max(creepCount, defensesNeeded);
-                                } else 
-                                {
+                                if (!creepCount) {
                                         // To build defence we need a creep colonies that will be morphed into actual defence type
                                         TCreepMap::iterator iCreep = mCreepTasks.find(base);
                                         // If there are no previous creep tasks or it has ended, then we may schedule another one:
                                         if (iCreep == mCreepTasks.end() || iCreep->second->hasEnded())
                                         {
-                                                Task creepTask = TaskManager::Instance().build(BWAPI::UnitTypes::Zerg_Creep_Colony, TaskType::Defense);
+                                                TaskPointer creepTask = TaskManager::Instance().build(BWAPI::UnitTypes::Zerg_Creep_Colony, TaskType::Defense);
                                                 mCreepTasks[base] = creepTask;
                                                 mDefenseTasks.push_back(creepTask); // just for cancel operation
                                         }
+                                } else {
+                                        defensesNeeded += std::min(neededPerBase, creepCount);
                                 }
                         } else {
                                 if (hasPylon)

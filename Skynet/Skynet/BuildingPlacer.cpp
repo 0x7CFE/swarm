@@ -34,7 +34,6 @@ void BuildingPlacerClass::calculateReservations()
 				mPermanentReserved[TilePosition(x, y)] = centerType;
 
 		// if its zerg, also reserve the area the larva hang out
-		// FIXME additional hatcheries may be placed incorrectly and too close to resources		
 		if(BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
 		{
 			for(int x = base->getCenterBuildLocation().x() - 1; x < base->getCenterBuildLocation().x()+centerType.tileWidth()+1; ++x)
@@ -743,7 +742,7 @@ std::vector<Base> BuildingPlacerClass::baseToBuildAtOrder(BWAPI::UnitType type) 
 	{
 		std::sort(basesOrder.begin(), basesOrder.end(), baseComparePylon);
 	}
-	else if(type == BWAPI::UnitTypes::Protoss_Photon_Cannon || type == BWAPI::UnitTypes::Terran_Missile_Turret)
+	else if(type == BWAPI::UnitTypes::Protoss_Photon_Cannon || type == BWAPI::UnitTypes::Terran_Missile_Turret || type == BWAPI::UnitTypes::Zerg_Creep_Colony)
 	{
 		std::vector<Base> newBasesOrder;
 		for (Base base : basesOrder)

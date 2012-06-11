@@ -285,7 +285,11 @@ void MacroManagerClass::onChangeBuild()
 	{
 		normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Protoss_Observer, 1, 115));
 		normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Protoss_Photon_Cannon, 1, 95));
-	}
+	} else if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+        {
+                normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Zerg_Creep_Colony, 1, 95));
+                normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Zerg_Sunken_Colony, 1, 95));
+        }
 
 	std::set<BWAPI::TechType> techSet;
 	std::set<BWAPI::UpgradeType> upgradeSet;
