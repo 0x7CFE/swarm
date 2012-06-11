@@ -14,7 +14,6 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 	if(BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Spawn_Broodlings) && mUnit->getEnergy() >= BWAPI::TechTypes::Spawn_Broodlings.energyUsed())
 	{
 		// Ok, we can do the spell. Who will be the target?
-		int numTargetting = UnitInformation::Instance().getUnitsTargetting(mUnit).size();
 
 		UnitGroup primaryTargets;     // Units that are best for applying spell
 		UnitGroup targetingEnemies;   // Spellable units that are targeting us
@@ -43,6 +42,7 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 					targetingEnemies.insert(unit);
 		}
 
+		int numTargetting = UnitInformation::Instance().getUnitsTargetting(mUnit).size();
 		bool castUrgently = (numTargetting > 0 && mUnit->totalHitPointFraction() < 0.6);
 		
 		if (!primaryTargets.empty())
