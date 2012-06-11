@@ -49,8 +49,8 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 		{
 			// FIXME Maybe choose a target randomly
 			Unit target = *primaryTargets.begin();
-			mUnit->useTech(BWAPI::TechTypes::Spawn_Broodlings, target);
 			LatencyTracker::Instance().placingBroodlings(mUnit, target);
+			mUnit->useTech(BWAPI::TechTypes::Spawn_Broodlings, target);
 			return true;
 		} else if (castUrgently) {
 			// We're under attack and we MUST do something or we'll die
@@ -58,8 +58,8 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 			
 			// Selecting closest unit to minimize damage taken
 			Unit target = targetingEnemies.getClosestUnit(mUnit);
-			mUnit->useTech(BWAPI::TechTypes::Spawn_Broodlings, target);
 			LatencyTracker::Instance().placingBroodlings(mUnit, target);
+			mUnit->useTech(BWAPI::TechTypes::Spawn_Broodlings, target);
 			return true;
 		}
 	}
