@@ -53,7 +53,7 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 		      // NOTE Maybe we need to cast another spell? For example Ensnare or at least throw a parasite
 		      
 		      // Selecting closest unit to minimize damage taken
-		      Unit target = primaryTargets.getClosestUnit(mUnit);
+		      Unit target = targetingEnemies.getClosestUnit(mUnit);
 		      mUnit->useTech(BWAPI::TechTypes::Spawn_Broodlings, target);
 		      return true;
 		}
@@ -67,7 +67,7 @@ bool QueenAction::castParasite(const UnitGroup& allEnemies)
 	//TODO LatencyTracker to handle spell. Do not cast spell is another is pending in the region or the unit targeted
 	
 	// Checking whether we could cast a spell right now
-	if(BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Spawn_Broodlings) && mUnit->getEnergy() >= BWAPI::TechTypes::Spawn_Broodlings.energyUsed())
+	if(BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Parasite) && mUnit->getEnergy() >= BWAPI::TechTypes::Parasite.energyUsed())
 	{
 		// Ok, we can do the spell. Who will be the target?
 
