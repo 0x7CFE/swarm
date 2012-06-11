@@ -11,6 +11,6 @@ public:
 
 	bool update(const Goal &squadGoal, const UnitGroup &squadUnitGroup);
 	bool castBroodlings(const UnitGroup& allEnemies);
-	bool castParasite(const UnitGroup& allEnemies);
+        bool castParasite(const UnitGroup& allEnemies, ActionType currentAction);
 	bool castEnsnare(const UnitGroup& allEnemies);
 };

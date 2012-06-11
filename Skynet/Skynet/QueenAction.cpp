@@ -21,9 +21,12 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 
 		for (Unit unit : allEnemies)
 		{
-			if(!unit->exists() || unit->isStasised())
+			if(!unit->exists() || 
+			    unit->isStasised() || 
+			    LatencyTracker::Instance().isSpawnBroodlingPending(unit))
 				continue;
 				
+			// TODO Move closer to unit if it is safe
 			if(mUnit->getDistance(unit) > BWAPI::TechTypes::Spawn_Broodlings.getWeapon().maxRange())
 				continue; // Unit is too far away
 
@@ -35,9 +38,9 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 			    type == BWAPI::UnitTypes::Zerg_Ultralisk 
 			   ) 
 				primaryTargets.insert(unit);
-
-			if (unit->getTarget() == mUnit && unit->getType().isOrganic() && !unit->getType().isFlyer())				
-				targetingEnemies.insert(unit);
+			else
+				if ((unit->getTarget() == mUnit) && unit->getType().isOrganic() && !unit->getType().isFlyer())
+					targetingEnemies.insert(unit);
 		}
 
 		bool castUrgently = (numTargetting > 0 && mUnit->totalHitPointFraction() < 0.6);
@@ -45,24 +48,26 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 		if (!primaryTargets.empty())
 		{
 			// FIXME Maybe choose a target randomly
-			Unit target = *primaryTargets.begin(); // getClosestUnit();
+			Unit target = *primaryTargets.begin();
 			mUnit->useTech(BWAPI::TechTypes::Spawn_Broodlings, target);
+			LatencyTracker::Instance().placingBroodlings(mUnit, target);
 			return true;
 		} else if (castUrgently) {
-		      // We're under attack and we MUST do something or we'll die
-		      // NOTE Maybe we need to cast another spell? For example Ensnare or at least throw a parasite
-		      
-		      // Selecting closest unit to minimize damage taken
-		      Unit target = targetingEnemies.getClosestUnit(mUnit);
-		      mUnit->useTech(BWAPI::TechTypes::Spawn_Broodlings, target);
-		      return true;
+			// We're under attack and we MUST do something or we'll die
+			// NOTE Maybe we need to cast another spell? For example Ensnare or at least throw a parasite
+			
+			// Selecting closest unit to minimize damage taken
+			Unit target = targetingEnemies.getClosestUnit(mUnit);
+			mUnit->useTech(BWAPI::TechTypes::Spawn_Broodlings, target);
+			LatencyTracker::Instance().placingBroodlings(mUnit, target);
+			return true;
 		}
 	}
 	
 	return false;
 }
 
-bool QueenAction::castParasite(const UnitGroup& allEnemies)
+bool QueenAction::castParasite(const UnitGroup& allEnemies, ActionType currentAction)
 {
 	//TODO LatencyTracker to handle spell. Do not cast spell is another is pending in the region or the unit targeted
 	
@@ -76,7 +81,12 @@ bool QueenAction::castParasite(const UnitGroup& allEnemies)
 
 		for (Unit unit : allEnemies)
 		{
-			if(!unit->exists() || unit->isStasised() || unit->isParasited())
+			// Filtering out unapplicable units
+			if(!unit->exists() || 
+			    unit->isStasised() || 
+			    unit->isParasited() || 
+			    LatencyTracker::Instance().isParasitePending(unit)
+			)
 				continue;
 				
 			if(mUnit->getDistance(unit) > BWAPI::TechTypes::Parasite.getWeapon().maxRange())
@@ -128,16 +138,22 @@ bool QueenAction::castParasite(const UnitGroup& allEnemies)
 				secondaryTargets.insert(unit);
 		}
 		
-		//bool castUrgently = (numTargetting > 0 && mUnit->totalHitPointFraction() < 0.3);
-		
 		if (!primaryTargets.empty())
 		{
-		      // TODO Select the unit with the highest priority
-		      Unit target = primaryTargets.getClosestUnit(mUnit);
-		      mUnit->useTech(BWAPI::TechTypes::Parasite, target);
-		      return true;
-		} else {
-		      // TODO
+			// TODO Select the unit with the highest priority
+			Unit target = primaryTargets.getClosestUnit(mUnit);
+			LatencyTracker::Instance().placingParasite(mUnit, target);
+			mUnit->useTech(BWAPI::TechTypes::Parasite, target);
+			return true;
+		} else if (!secondaryTargets.empty()) {
+			// Secondary targets are parasited only if we're not attacking
+			if (currentAction != ActionType::Attack)
+			{
+				Unit target = secondaryTargets.getClosestUnit(mUnit);
+				LatencyTracker::Instance().placingParasite(mUnit, target);
+				mUnit->useTech(BWAPI::TechTypes::Parasite, target);
+				return true;
+			}
 		}
 	}
 	
@@ -166,7 +182,11 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 		{
 			// Filtering out units that are already dead, not important or already under the spell
 			// TODO Plagued units are preferable target, making them more vulnerable 
-			if(!unit->exists() || unit->isStasised() || (unit->getEnsnareTimer() > 0) )
+			if(!unit->exists() || 
+			    unit->isStasised() || 
+			    (unit->getEnsnareTimer() > 0) || 
+			    (unit->isCloaked() && !unit->isDetected()) // ensnared unit will be revealed
+			)
 				continue;
 
 			// These units should be skipped. It's just a waste of energy to spell them
@@ -306,7 +326,7 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 		
 		if (castBroodlings(allEnemies))
 			engaged = true;
-		else if ( (squadGoal.getActionType() != ActionType::Attack) && castParasite(allEnemies) )
+		else if (castParasite(allEnemies, squadGoal.getActionType()))
 			engaged = true;
 		else if (castEnsnare(allEnemies))
 			engaged = true;
@@ -451,7 +471,7 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 			}
 		}
 	} else {
-		Position pos = mUnit->getPosition();
+		/*Position pos = mUnit->getPosition();
 		Position target = mUnit->getTarget()->getPosition();
 		
 		BWAPI::Broodwar->drawLine(
@@ -463,7 +483,7 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 		BWAPI::Broodwar->drawTextMap(
 			pos.x() + BWAPI::UnitTypes::Zerg_Queen.dimensionRight(), 
 			pos.y() + 60, 
-			"Spell engaged!");
+			"Spell engaged!");*/
 	}
 	
 	
