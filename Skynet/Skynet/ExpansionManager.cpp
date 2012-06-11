@@ -118,22 +118,27 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
                                 {
                                         // To build defence we need a creep colonies that will be morphed into actual defence type
                                         TCreepMap::iterator iCreep = mCreepTasks.find(base);
-                                        if (iCreep == mCreepTasks.end() || !iCreep->second->hasEnded())
-                                                mCreepTasks[base] = TaskManager::Instance().build(BWAPI::UnitTypes::Zerg_Creep_Colony, TaskType::Defense);
+                                        // If there are no previous creep tasks or it has ended, then we may schedule another one:
+                                        if (iCreep == mCreepTasks.end() || iCreep->second->hasEnded())
+                                        {
+                                                Task creepTask = TaskManager::Instance().build(BWAPI::UnitTypes::Zerg_Creep_Colony, TaskType::Defense);
+                                                mCreepTasks[base] = creepTask;
+                                                mDefenseTasks.push_back(creepTask); // just for cancel operation
+                                        }
                                 }
-                        }
-			
-			if (hasPylon)
-			{
-				defensesNeeded += neededPerBase;
-				defensesNeeded -= std::min(thisCount, neededPerBase);
-			}
-			else 
-                        {
-			    if( (myRace == BWAPI::Races::Protoss) 
-				&& BWAPI::Broodwar->self()->supplyTotal() >= 380 
-				&& (!mPylon || mPylon->hasEnded()))
-					mPylon = TaskManager::Instance().build(BWAPI::UnitTypes::Protoss_Pylon, TaskType::Defense);
+                        } else {
+                                if (hasPylon)
+                                {
+                                        defensesNeeded += neededPerBase;
+                                        defensesNeeded -= std::min(thisCount, neededPerBase);
+                                }
+                                else 
+                                {
+                                        if( (myRace == BWAPI::Races::Protoss) 
+                                                && BWAPI::Broodwar->self()->supplyTotal() >= 380 
+                                                && (!mPylon || mPylon->hasEnded()))
+                                                        mPylon = TaskManager::Instance().build(BWAPI::UnitTypes::Protoss_Pylon, TaskType::Defense);
+                                }
                         }
 		}
 

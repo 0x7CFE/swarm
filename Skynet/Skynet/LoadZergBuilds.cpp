@@ -92,12 +92,12 @@ void BuildOrderManagerClass::LoadZergBuilds()
 //	       zvpMiddle.addItem(Pneumatized_Carapace, 1, CB(ID_2, CallBackType::onCompleted));
 	
 	zvpMiddle.addItem(Zerg_Zergling, 10, TaskType::Highest);
-	zvpMiddle.addItem(Zerg_Hydralisk, TaskType::Highest,  CB(ID_1, CallBackType::onDispatched), 10);
+	ID_2 = zvpMiddle.addItem(Zerg_Hydralisk, TaskType::Highest,  CB(ID_1, CallBackType::onDispatched), 10);
 	
 	zvpMiddle.addSquad(SquadType::DefaultSquad);
 	zvpMiddle.addSquad(SquadType::DefenseSquad);
 	
-	ID_3 = zvpMiddle.addItem(Burrowing, TaskType::Highest, CB(ID_1, CallBackType::onDispatched));
+	ID_3 = zvpMiddle.addItem(Burrowing, TaskType::Highest/*, CB(ID_2, CallBackType::onCompleted)*/);
 	zvpMiddle.addOrder(Order::Scout, CB(ID_1, CallBackType::onCompleted));
 	
 	ID_1 =	zvpMiddle.addItem(Grooved_Spines, 1, CB(ID_1, CallBackType::onDispatched));

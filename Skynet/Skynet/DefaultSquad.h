@@ -39,7 +39,7 @@ private:
 	std::map<Unit, Behaviour> mUnitBehaviours;
 
 	//Unit mObserver;
-        int mObserverCount;
+        unsigned int mObserverCount;
 
 	Goal mLastGoal;
 	bool mEngageFull;
