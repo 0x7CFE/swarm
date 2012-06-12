@@ -95,12 +95,12 @@ void LatencyTrackerClass::placingEnsnare ( Unit who, Position where ) {
 }
 
 void LatencyTrackerClass::placingBroodlings ( Unit who, Unit target ) {
-        mPendingBroodlings[who] = std::make_pair(target, BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames());
+        mPendingBroodlings[who] = std::make_pair(target, BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames() + 32);
         mBroodlingVictims.insert(target);
 }
 
 void LatencyTrackerClass::placingParasite ( Unit who, Unit target ) {
-        mPendingParasites[who] = std::make_pair(target, BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames());
+        mPendingParasites[who] = std::make_pair(target, BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames() + 32);
         mParasiteVictims.insert(target);
 }
 

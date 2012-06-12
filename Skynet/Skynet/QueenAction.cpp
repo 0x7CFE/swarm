@@ -18,28 +18,29 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 		UnitGroup primaryTargets;     // Units that are best for applying spell
 		UnitGroup targetingEnemies;   // Spellable units that are targeting us
 
-		for (Unit unit : allEnemies)
+		for (Unit enemy : allEnemies)
 		{
-			if(!unit->exists() || 
-			    unit->isStasised() || 
-			    LatencyTracker::Instance().isSpawnBroodlingPending(unit))
+			if(!enemy->exists() || 
+			    enemy->isStasised() || 
+			    (enemy->isCloaked() && !enemy->isDetected()) ||
+			    LatencyTracker::Instance().isSpawnBroodlingPending(enemy))
 				continue;
 				
 			// TODO Move closer to unit if it is safe
-			if(mUnit->getDistance(unit) > BWAPI::TechTypes::Spawn_Broodlings.getWeapon().maxRange())
+			if(mUnit->getDistance(enemy) > BWAPI::TechTypes::Spawn_Broodlings.getWeapon().maxRange())
 				continue; // Unit is too far away
 
 			// Primary target for broodlings are siege tanks and high templars
-			const BWAPI::UnitType &type = unit->getType();
+			const BWAPI::UnitType &type = enemy->getType();
 			if (type == BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode ||
 			    type == BWAPI::UnitTypes::Protoss_High_Templar || 
 			    type == BWAPI::UnitTypes::Zerg_Defiler || 
 			    type == BWAPI::UnitTypes::Zerg_Ultralisk 
 			   ) 
-				primaryTargets.insert(unit);
+				primaryTargets.insert(enemy);
 			else
-				if ((unit->getTarget() == mUnit) && unit->getType().isOrganic() && !unit->getType().isFlyer())
-					targetingEnemies.insert(unit);
+				if ((enemy->getTarget() == mUnit) && enemy->getType().isOrganic() && !enemy->getType().isFlyer())
+					targetingEnemies.insert(enemy);
 		}
 
 		int numTargetting = UnitInformation::Instance().getUnitsTargetting(mUnit).size();
@@ -79,21 +80,22 @@ bool QueenAction::castParasite(const UnitGroup& allEnemies, ActionType currentAc
 		UnitGroup primaryTargets;     // Units that are best for applying spell
 		UnitGroup secondaryTargets;   // All other units that may be parasited
 
-		for (Unit unit : allEnemies)
+		for (Unit enemy : allEnemies)
 		{
 			// Filtering out unapplicable units
-			if(!unit->exists() || 
-			    unit->isStasised() || 
-			    unit->isParasited() || 
-			    LatencyTracker::Instance().isParasitePending(unit)
+			if(!enemy->exists() || 
+			    enemy->isStasised() || 
+			    enemy->isParasited() || 
+			    LatencyTracker::Instance().isParasitePending(enemy) ||
+                            LatencyTracker::Instance().isSpawnBroodlingPending(enemy)
 			)
 				continue;
 				
-			if(mUnit->getDistance(unit) > BWAPI::TechTypes::Parasite.getWeapon().maxRange())
+			if(mUnit->getDistance(enemy) > BWAPI::TechTypes::Parasite.getWeapon().maxRange())
 				continue; // Unit is too far away
 
 			// Primary target for broodlings are siege tanks and high templars
-			const BWAPI::UnitType &type = unit->getType();
+			const BWAPI::UnitType &type = enemy->getType();
 			if (
 			    // TODO Rewrite using priority map
 			    
@@ -133,9 +135,9 @@ bool QueenAction::castParasite(const UnitGroup& allEnemies, ActionType currentAc
 			    type == BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode  ||  // ORLY? 
 			    type == BWAPI::UnitTypes::Protoss_Reaver
 			) 
-				primaryTargets.insert(unit);
+				primaryTargets.insert(enemy);
 			else
-				secondaryTargets.insert(unit);
+				secondaryTargets.insert(enemy);
 		}
 		
 		if (!primaryTargets.empty())
@@ -178,19 +180,19 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 		UnitGroup targetsToChooseFrom;
 // 		UnitGroup needsDetecting;
 
-		for (Unit unit : allEnemies)
+		for (Unit enemy : allEnemies)
 		{
 			// Filtering out units that are already dead, not important or already under the spell
 			// TODO Plagued units are preferable target, making them more vulnerable 
-			if(!unit->exists() || 
-			    unit->isStasised() || 
-			    (unit->getEnsnareTimer() > 0) || 
-			    (unit->isCloaked() && !unit->isDetected()) // ensnared unit will be revealed
+			if(!enemy->exists() || 
+			    enemy->isStasised() || 
+			    (enemy->getEnsnareTimer() > 0) || 
+			    (enemy->isCloaked() && !enemy->isDetected()) // ensnared unit will be revealed
 			)
 				continue;
 
 			// These units should be skipped. It's just a waste of energy to spell them
-			const BWAPI::UnitType &type = unit->getType();
+			const BWAPI::UnitType &type = enemy->getType();
 			if(type.isBuilding() || 
 			   type == BWAPI::UnitTypes::Terran_Vulture_Spider_Mine || 
 			   type == BWAPI::UnitTypes::Zerg_Egg || 
@@ -200,7 +202,7 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 				continue;
 
 			// Unit is too far away
-			if(mUnit->getDistance(unit) > BWAPI::TechTypes::Ensnare.getWeapon().maxRange())
+			if(mUnit->getDistance(enemy) > BWAPI::TechTypes::Ensnare.getWeapon().maxRange())
 				continue;
 
 // 			UnitType& unitType = mUnit->getType();
@@ -214,7 +216,7 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 // 			} else 
 			
 			// Ok, seems this unit could be the victim
-			targetsToChooseFrom.insert(unit);
+			targetsToChooseFrom.insert(enemy);
 		}
 
 		UnitGroup targets(targetsToChooseFrom);
