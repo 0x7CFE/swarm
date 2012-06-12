@@ -268,16 +268,6 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 		mUnit->attack(closestUnit);
 		return true;
 	}
-	
-	if (BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing))
-	{
-		if ( (BWAPI::Broodwar->getFrameCount() - mUnit->getLastOrderExecuteTime() > 2 * 24) 
-		      && mUnit->getType().isBurrowable() && mUnit->isIdle() && !mUnit->isBurrowed())
-		{
-			mUnit->burrow();
-			return true;
-		}
-	}
 		
 	return false;
 }

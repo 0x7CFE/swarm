@@ -1419,38 +1419,38 @@ void UnitClass::useTech(BWAPI::TechType tech, Unit target)
 
 void UnitClass::burrow()
 {
-    if (exists())
-    {
-	if (! BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing))
-		return;
-      
-	BWAPI::Order& order = getOrder();
-	if (isBurrowed() || (order == BWAPI::Orders::Burrowing) || (getLastCommand().getType() == BWAPI::UnitCommandTypes::Burrow))
-	    return;
-	else
+	if (exists())
 	{
-	    if (mUnit->burrow())
-		mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
+		if ( !BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing) && mUnit->getType() != BWAPI::UnitTypes::Zerg_Lurker)
+			return;
+      
+		BWAPI::Order& order = getOrder();
+		if (isBurrowed() || (order == BWAPI::Orders::Burrowing) || (getLastCommand().getType() == BWAPI::UnitCommandTypes::Burrow))
+			return;
+		else
+		{
+			if (mUnit->burrow())
+				mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
+		}
 	}
-    }
 }
 
 void UnitClass::unburrow()
 {
-    if (exists())
-    {
-	if (! BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing))
-		return;
-	
-	BWAPI::Order& order = getOrder();
-	if (!isBurrowed() || (order == BWAPI::Orders::Unburrowing) || (getLastCommand().getType() == BWAPI::UnitCommandTypes::Unburrow))
-	    return;
-	else
+	if (exists())
 	{
-	    if (mUnit->unburrow())
-		mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
+		if ( !BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing) && mUnit->getType() != BWAPI::UnitTypes::Zerg_Lurker)
+			return;
+	
+		BWAPI::Order& order = getOrder();
+		if (!isBurrowed() || (order == BWAPI::Orders::Unburrowing) || (getLastCommand().getType() == BWAPI::UnitCommandTypes::Unburrow))
+			return;
+		else
+		{
+			if (mUnit->unburrow())
+			mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
+		}
 	}
-    }
 }
 
 bool UnitClass::unburrowBeforeAction()
