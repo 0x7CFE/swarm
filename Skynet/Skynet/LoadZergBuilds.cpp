@@ -113,7 +113,7 @@ void BuildOrderManagerClass::LoadZergBuilds()
 	zvpMiddle.addProduce(Zerg_Hydralisk, 14);
 	//zvpMiddle.addProduce(Zerg_Mutalisk, 1);
 	
-	zvpMiddle.addProduce(Zerg_Queen, 8, 100); //, Condition(ConditionTest::isResearching, Ensnare)); 
+	zvpMiddle.addProduce(Zerg_Queen, 14, 100);//, Condition(ConditionTest::isResearching, Spawn_Broodlings)); 
 	//Condition(ConditionTest::myPlannedUnitTotalGreaterEqualThan, Zerg_Queens_Nest, 1));
 //	zvpMiddle.addProduce(Zerg_Defiler, 8, 100, Condition(ConditionTest::isResearching, Plague));
 	zvpMiddle.addProduce(Zerg_Lurker, 8, 100, Condition(ConditionTest::isResearching, Lurker_Aspect)); // TODO Lurker operation

@@ -387,7 +387,7 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 		
 		if (closestThreat)
 		{
-			if (minEffectiveRange < 10) //std::max(BWAPI::TechTypes::Ensnare.getWeapon().maxRange(), BWAPI::TechTypes::Spawn_Broodlings.getWeapon().maxRange()))
+			if (minEffectiveRange < 0) //std::max(BWAPI::TechTypes::Ensnare.getWeapon().maxRange(), BWAPI::TechTypes::Spawn_Broodlings.getWeapon().maxRange()))
 			{
 				// We're under attack! Move move move!
 				stayAtRange(mUnit, 
