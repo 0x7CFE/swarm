@@ -80,8 +80,11 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
 
 		for (Base base : myBases)
 		{
-			if(base->getMinerals().empty())
-				continue; // Nothing to defend?
+			if(base->getMinerals().empty() || 
+                                !base->isActive() || 
+                                // Wait 3 minutes until there will be enough creep for defence structures
+                                ((unsigned int)BWAPI::Broodwar->getFrameCount() < base->getActivateTime() + 24 * 60 * 2))
+                                        continue; 
 
 			bool hasPylon = defenseType.requiresPsi() ? false : true;
 			int thisCount = 0;
@@ -119,7 +122,9 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
                                                 mDefenseTasks.push_back(creepTask); // just for cancel operation
                                         }
                                 } else {
-                                        defensesNeeded += std::min(neededPerBase, creepCount);
+                                        int currentPerBase = neededPerBase - thisCount;
+                                        currentPerBase = std::min(currentPerBase, creepCount);
+                                        defensesNeeded += currentPerBase;
                                 }
                         } else {
                                 if (hasPylon)

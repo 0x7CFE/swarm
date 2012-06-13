@@ -76,6 +76,7 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 
 		if(unit->canAttack(mUnit) || type == BWAPI::UnitTypes::Terran_Science_Vessel)
 		{
+                        // TODO Zerg
 			const int weaponRange = type == BWAPI::UnitTypes::Terran_Science_Vessel ? BWAPI::TechTypes::EMP_Shockwave.getWeapon().maxRange() : type == BWAPI::UnitTypes::Terran_Vulture_Spider_Mine ? BWAPI::UnitTypes::Terran_Vulture_Spider_Mine.seekRange() : unit->getWeaponMaxRange(mUnit);
 			const int distance = mUnit->getDistance(unit) - weaponRange;
 			if(distance < closestUnitDistance)
@@ -86,8 +87,10 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 			}
 		}
 
-		if(type == BWAPI::UnitTypes::Terran_Vulture_Spider_Mine && actionUnitType == BWAPI::UnitTypes::Protoss_Zealot)
-			continue;
+		if(type == BWAPI::UnitTypes::Terran_Vulture_Spider_Mine && 
+                        (actionUnitType == BWAPI::UnitTypes::Protoss_Zealot || 
+                        actionUnitType == BWAPI::UnitTypes::Zerg_Zergling))
+                                continue;
 
 		if(!mUnit->canAttackNow(unit))
 			continue;

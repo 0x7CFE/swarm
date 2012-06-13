@@ -734,15 +734,69 @@ bool baseCompareDefense(const Base &i, const Base &j, BWAPI::UnitType type)
 	return jCount > iCount;
 }
 
+bool baseCompareCreep(const Base &i, const Base &j)
+{
+        // Here we need to decide where to put next creep colony
+        // Undefended bases should be selected first
+        
+        // Prioritise a base without a depot the lowest
+        if(i->getResourceDepot())
+        {
+                if(!j->getResourceDepot())
+                        return true;
+        }
+        else if(!j->getResourceDepot())
+                return false;
+
+        // Counting the defence structures
+        int iCount = 0;
+        for (Unit building : i->getBuildings())
+        {
+                if((building->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony || 
+                    building->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony ||
+                    building->getType() == BWAPI::UnitTypes::Zerg_Spore_Colony) 
+                        && building->getPlayer() == BWAPI::Broodwar->self())
+                                ++iCount;
+        }
+
+        int jCount = 0;
+        for (Unit building : j->getBuildings())
+        {
+                if((building->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony || 
+                    building->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony ||
+                    building->getType() == BWAPI::UnitTypes::Zerg_Spore_Colony) 
+                        && building->getPlayer() == BWAPI::Broodwar->self())
+                                ++iCount;
+        }
+
+        if(iCount == 0)
+        {
+                if(jCount != 0)
+                        return true;
+        }
+        else if(jCount == 0)
+                return false;
+
+        // Finally prioritise using the default sort
+        return baseCompare(i, j);
+}
+
 std::vector<Base> BuildingPlacerClass::baseToBuildAtOrder(BWAPI::UnitType type) const
 {
 	std::vector<Base> basesOrder = baseToBuildAtOrder();
 
-	if(type == BWAPI::UnitTypes::Protoss_Pylon)
+        if(type == BWAPI::UnitTypes::Zerg_Creep_Colony)
+        {
+                std::sort(basesOrder.begin(), basesOrder.end(), baseCompareCreep);
+        }
+	else if(type == BWAPI::UnitTypes::Protoss_Pylon)
 	{
 		std::sort(basesOrder.begin(), basesOrder.end(), baseComparePylon);
 	}
-	else if(type == BWAPI::UnitTypes::Protoss_Photon_Cannon || type == BWAPI::UnitTypes::Terran_Missile_Turret || type == BWAPI::UnitTypes::Zerg_Creep_Colony)
+	else if(type == BWAPI::UnitTypes::Protoss_Photon_Cannon || 
+                type == BWAPI::UnitTypes::Terran_Missile_Turret) 
+                //type == BWAPI::UnitTypes::Zerg_Sunken_Colony || 
+                //type == BWAPI::UnitTypes::Zerg_Spore_Colony)
 	{
 		std::vector<Base> newBasesOrder;
 		for (Base base : basesOrder)
