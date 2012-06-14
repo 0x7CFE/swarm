@@ -19,7 +19,8 @@ void SupplyManagerClass::update()
 		{
 			if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
 			{
-				// Checking if we're already creating a lot of overlords (probably a HACK)
+				// TODO Rewrite using task pointer lists
+                                // Checking if we're already creating a lot of overlords (probably a HACK)
 				int trainingOverlords = 0;
 				UnitGroup overlords = UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Overlord);
 				for (Unit overlord : overlords)
@@ -27,8 +28,12 @@ void SupplyManagerClass::update()
 					if (! overlord->isCompleted())
 						trainingOverlords++;
 				}
-				if (trainingOverlords > 3)
+				if (trainingOverlords > 2)
+                                {
+                                        if (mLastItem)
+                                                mLastItem->cancel();
 					return; 
+                                }
 			}
 		  
 			if(!mLastItem || mLastItem->hasDispatched() || mLastItem->hasEnded())

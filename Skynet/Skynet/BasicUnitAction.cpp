@@ -284,4 +284,5 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 			return true;
 		}
 	}
+	return false;
 }
