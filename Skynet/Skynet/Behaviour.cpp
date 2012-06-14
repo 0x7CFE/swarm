@@ -9,6 +9,7 @@
 #include "ArbiterAction.h"
 #include "DetectorAction.h"
 #include "QueenAction.h"
+#include "BurrowAction.h"
 
 Behaviour::Behaviour(Unit unit)
 	: mUnit(unit)
@@ -118,6 +119,9 @@ void Behaviour::createDefaultActions()
 	if (unitType == BWAPI::UnitTypes::Zerg_Queen) 
 		mMicroActions.push_back(MicroAction(new QueenAction(mUnit)));
 	
+        if (unitType.isBurrowable())
+                mMicroActions.push_back(MicroAction(new BurrowAction(mUnit)));
+        
 	targetPriorities.push_back(firstTargets);
 	mMicroActions.push_back(MicroAction(new BasicUnitAction(mUnit, targetPriorities)));
 	mMicroActions.push_back(MicroAction(new GoalAction(mUnit)));
