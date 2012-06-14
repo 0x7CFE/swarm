@@ -5,6 +5,7 @@
 #include "LatencyTracker.h"
 #include "Logger.h"
 #include "UnitHelper.h"
+#include "BasicUnitAction.h"
 
 bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 {
@@ -27,7 +28,7 @@ bool QueenAction::castBroodlings(const UnitGroup& allEnemies)
 				continue;
 				
 			// TODO Move closer to unit if it is safe
-			if(mUnit->getDistance(enemy) > BWAPI::TechTypes::Spawn_Broodlings.getWeapon().maxRange())
+			if(mUnit->getDistance(enemy) > BWAPI::TechTypes::Spawn_Broodlings.getWeapon().maxRange() * 2)
 				continue; // Unit is too far away
 
 			// Primary target for broodlings are siege tanks and high templars
@@ -91,7 +92,7 @@ bool QueenAction::castParasite(const UnitGroup& allEnemies, ActionType currentAc
 			)
 				continue;
 				
-			if(mUnit->getDistance(enemy) > BWAPI::TechTypes::Parasite.getWeapon().maxRange())
+			if(mUnit->getDistance(enemy) > BWAPI::TechTypes::Parasite.getWeapon().maxRange() * 2)
 				continue; // Unit is too far away
 
 			// Primary target for broodlings are siege tanks and high templars
@@ -175,7 +176,6 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 	if(BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Ensnare) && mUnit->getEnergy() >= BWAPI::TechTypes::Ensnare.energyUsed())
 	{
 		// Ok, we can do the spell. Who will be the target?
-		int numTargetting = UnitInformation::Instance().getUnitsTargetting(mUnit).size();
 
 		UnitGroup targetsToChooseFrom;
 // 		UnitGroup needsDetecting;
@@ -202,7 +202,7 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 				continue;
 
 			// Unit is too far away
-			if(mUnit->getDistance(enemy) > BWAPI::TechTypes::Ensnare.getWeapon().maxRange())
+			if(mUnit->getDistance(enemy) > BWAPI::TechTypes::Ensnare.getWeapon().maxRange() * 2)
 				continue;
 
 // 			UnitType& unitType = mUnit->getType();
@@ -221,6 +221,7 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 
 		UnitGroup targets(targetsToChooseFrom);
 
+		int numTargetting = UnitInformation::Instance().getUnitsTargetting(mUnit).size();
 		bool castUrgently = (numTargetting > 2 || (numTargetting > 0 && mUnit->totalHitPointFraction() < 0.6));
 
 		int tries = 0;
@@ -242,18 +243,19 @@ bool QueenAction::castEnsnare(const UnitGroup& allEnemies)
 
 					int ensnaredCount = 0;
 					// Finding own units that may fall under the spell
-					for (Unit unit : UnitTracker::Instance().selectAllUnits())
+					for (Unit unit : UnitTracker::Instance().selectAllUnits(BWAPI::Broodwar->self()))
 					{
 						// TODO Supply correct coefficients
-						if ( (unit->getEnsnareTimer() == 0) && unit->getDistance(castLocation) < 64)
+						if ( (unit->getEnsnareTimer() == 0) && unit->getDistance(castLocation) < 128)
 							++ensnaredCount;
 
-						if(ensnaredCount > 5)
+						if(ensnaredCount > 2)
 							break; 
 					}
 
 					// Ok, the spell is not lethal, so continue
-					if (ensnaredCount <= 5)
+					// TODO Weight
+					if (ensnaredCount <= 2)
 					{
 						// Checking whether the target's center is in the firing range
 						int distanceToCastLocation = mUnit->getDistance(castLocation);
@@ -411,6 +413,8 @@ bool QueenAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGroup)
 			}
 			return true;
 		} else {
+			return BasicUnitAction::update(squadGoal, squadUnitGroup); // FIXME Will it work?
+			
 			// Enemies are not so close. We may hold our group
 			UnitGroup unitsToStayNearby;
 			for (Unit unit : squadUnitGroup)

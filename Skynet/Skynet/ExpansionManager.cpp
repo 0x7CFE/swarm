@@ -83,7 +83,7 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
 			if(base->getMinerals().empty() || 
                                 !base->isActive() || 
                                 // Wait 3 minutes until there will be enough creep for defence structures
-                                ((unsigned int)BWAPI::Broodwar->getFrameCount() < base->getActivateTime() + 24 * 60 * 2))
+                                ((unsigned int)BWAPI::Broodwar->getFrameCount() < base->getActivateTime() + 24 * 60 * 3))
                                         continue; 
 
 			bool hasPylon = defenseType.requiresPsi() ? false : true;
