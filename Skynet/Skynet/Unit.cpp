@@ -280,6 +280,10 @@ void UnitClass::drawUnitPosition()
 	const BWAPI::UnitType &type = getType();
 	Player player = getPlayer();
 
+        // Idle larvas just bloat the screen
+        if (type == BWAPI::UnitTypes::Zerg_Larva && !isMorphing())
+            return;
+        
 	const int barHeight = 4;
 
 	if((!isCompleted() || isMorphing()) && accessibility() != AccessType::Prediction)
@@ -1423,32 +1427,38 @@ void UnitClass::useTech(BWAPI::TechType tech, Unit target)
 
 void UnitClass::burrow()
 {
-    if (exists())
-    {
-	BWAPI::Order& order = getOrder();
-	if (isBurrowed() || (order == BWAPI::Orders::Burrowing) || (getLastCommand().getType() == BWAPI::UnitCommandTypes::Burrow))
-	    return;
-	else
-	{
-	    if (mUnit->burrow())
-		mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
-	}
-    }
+        if (exists())
+        {
+                if ( !BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing) && mUnit->getType() != BWAPI::UnitTypes::Zerg_Lurker)
+                        return;
+      
+                BWAPI::Order& order = getOrder();
+                if (isBurrowed() || (order == BWAPI::Orders::Burrowing) || (getLastCommand().getType() == BWAPI::UnitCommandTypes::Burrow))
+                        return;
+                else
+                {
+                        if (mUnit->burrow())
+                                mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
+                }
+        }
 }
 
 void UnitClass::unburrow()
 {
-    if (exists())
-    {
-	BWAPI::Order& order = getOrder();
-	if (!isBurrowed() || order == BWAPI::Orders::Unburrowing || getLastCommand().getType() == BWAPI::UnitCommandTypes::Unburrow)
-	    return;
-	else
-	{
-	    if (mUnit->unburrow())
-		mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
-	}
-    }
+        if (exists())
+        {
+                if ( !BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing) && mUnit->getType() != BWAPI::UnitTypes::Zerg_Lurker)
+                        return;
+        
+                BWAPI::Order& order = getOrder();
+                if (!isBurrowed() || (order == BWAPI::Orders::Unburrowing) || (getLastCommand().getType() == BWAPI::UnitCommandTypes::Unburrow))
+                        return;
+                else
+                {
+                        if (mUnit->unburrow())
+                        mLastOrderExecuteTime = BWAPI::Broodwar->getFrameCount() + BWAPI::Broodwar->getRemainingLatencyFrames();
+                }
+        }
 }
 
 bool UnitClass::unburrowBeforeAction()
