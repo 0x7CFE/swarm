@@ -85,7 +85,8 @@ bool QueenAction::castParasite(const UnitGroup& allEnemies, ActionType currentAc
                         if(!unit->exists() || 
                             unit->isStasised() || 
                             unit->isParasited() || 
-                            LatencyTracker::Instance().isParasitePending(unit)
+                            LatencyTracker::Instance().isParasitePending(unit) // ||
+							//LatencyTracker::Instance().isSpawnBroodlingPending(unit)
                         )
                                 continue;
                                 
