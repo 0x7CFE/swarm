@@ -205,16 +205,30 @@ void MacroManagerClass::updateUnitProduction()
 	for (UnitToProduce unit : unitsToProduce)
 	{
 		int plannedTotalUnit = UnitTracker::Instance().selectAllUnits(unit.getUnitType()).size();
-		totalPerProductionBuilding[unit.getUnitType().whatBuilds().first] += plannedTotalUnit;
+                BWAPI::UnitType whatBuilds = unit.getUnitType().whatBuilds().first;
+                if(whatBuilds == BWAPI::UnitTypes::Zerg_Larva)
+                        whatBuilds = BWAPI::UnitTypes::Zerg_Hatchery;
+                
+		totalPerProductionBuilding[whatBuilds] += plannedTotalUnit;
 		UnitTotals[unit.getUnitType()] += plannedTotalUnit;
 
-		totalWeightPerBuilding[unit.getUnitType().whatBuilds().first] += unit.getUnitWeight();
-		UnitToBuilding[unit.getUnitType().whatBuilds().first][unit.getUnitType()] = unit.getUnitWeight();
+		totalWeightPerBuilding[whatBuilds] += unit.getUnitWeight();
+		UnitToBuilding[whatBuilds][unit.getUnitType()] = unit.getUnitWeight();
 	}
 
 	for (std::pair<BWAPI::UnitType, int> totalPair : totalPerProductionBuilding)
 	{
-		int buildings = UnitTracker::Instance().selectAllUnits(totalPair.first).size() * 2;
+		int buildings = 0; 
+                if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+                {
+                        buildings += UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Hatchery).size();
+                        buildings += UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Lair).size();
+                        buildings += UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Hive).size();
+                        buildings *= 3; // each building supports up to 3 larvas
+                }
+                else
+                        buildings = UnitTracker::Instance().selectAllUnits(totalPair.first).size() * 2;
+                
 		int queued = mTasksPerProductionType[totalPair.first].size();
 		int freeProductionBuildings = buildings - queued;
 		if(freeProductionBuildings > 0)
@@ -287,8 +301,8 @@ void MacroManagerClass::onChangeBuild()
 		normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Protoss_Photon_Cannon, 1, 95));
 	} else if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
         {
-                normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Zerg_Creep_Colony, 1, 95));
-                normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Zerg_Sunken_Colony, 1, 95));
+                //normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Zerg_Creep_Colony, 1, 95));
+                //normalWithExtra.push_back(UnitToProduce(BWAPI::UnitTypes::Zerg_Sunken_Colony, 1, 95));
         }
 
 	std::set<BWAPI::TechType> techSet;
@@ -409,28 +423,54 @@ void MacroManagerClass::updateProductionProduction()
 	{
 		if(hasRequirements(unit.getUnitType()) && unit.canBuildFactory())
 		{
-			BWAPI::UnitType whatBuilds = unit.getUnitType().whatBuilds().first;
-			if(whatBuilds == BWAPI::UnitTypes::Zerg_Larva)
-				whatBuilds = BWAPI::UnitTypes::Zerg_Hatchery;
+                        if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+                        {
+                                BWAPI::UnitType whatBuilds = unit.getUnitType().whatBuilds().first;
+                                if(whatBuilds == BWAPI::UnitTypes::Zerg_Larva)
+                                        whatBuilds = BWAPI::UnitTypes::Zerg_Hatchery;
+                                else
+                                        continue; // We're interested only in basic units
+                                
+                                UnitGroup larvae = UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Larva);
+                                int idleLarvaCount = 0;
+                                for (Unit larva : larvae)
+                                        if (!larva->isMorphing())
+                                                idleLarvaCount++;
 
-			bool unstartedBuild = false;
-			for (TaskPointer task : mTasksPerProducedType[whatBuilds])
-			{
-				if(!task->inProgress())
-					unstartedBuild = true;
-			}
-			if(unstartedBuild)
-				continue;
+                                int unstartedCount = 0;
+                                for (TaskPointer task : mTasksPerProducedType[whatBuilds])
+                                {
+                                        if(!task->inProgress())
+                                                unstartedCount++;
+                                }
+                                        
+                                // If there are no idle larvas and we have 
+                                // build tasks then an extra hatchery is needed
+                                if(idleLarvaCount == 0 && unstartedCount > 3) // TODO constant
+                                        TaskManager::Instance().build(whatBuilds, TaskType::MacroExtraProduction);
+                        } 
+                        else                        
+                        {
+                                BWAPI::UnitType whatBuilds = unit.getUnitType().whatBuilds().first;
+                                bool unstartedBuild = false;
+                                for (TaskPointer task : mTasksPerProducedType[whatBuilds])
+                                {
+                                        if(!task->inProgress())
+                                                unstartedBuild = true;
+                                }
+                                if(unstartedBuild)
+                                        continue;
 
-			int idleOfThis = 0;
-			for (Unit building : UnitTracker::Instance().selectAllUnits(whatBuilds))
-			{
-				if(building->isCompleted() && !building->isTraining())
-					++idleOfThis;
-			}
+                                int idleOfThis = 0;
+                                for (Unit building : UnitTracker::Instance().selectAllUnits(whatBuilds))
+                                {
+                                        if(building->isCompleted() && !building->isTraining())
+                                                ++idleOfThis;
+                                }
 
-			if(idleOfThis == 0)
-				TaskManager::Instance().build(whatBuilds, TaskType::MacroExtraProduction);
+                                if(idleOfThis == 0)
+                                        TaskManager::Instance().build(whatBuilds, TaskType::MacroExtraProduction);
+                        }
 		}
 	}
 }
@@ -704,7 +744,11 @@ void MacroManagerClass::updateTech()
 
 void MacroManagerClass::onBuildTask(TaskPointer task, BWAPI::UnitType unitType)
 {
-	mTasksPerProductionType[unitType.whatBuilds().first].push_back(task);
+        UnitType whatBuilds = unitType.whatBuilds().first;
+        if (whatBuilds == BWAPI::UnitTypes::Zerg_Larva)
+                whatBuilds = BWAPI::UnitTypes::Zerg_Hatchery;
+                
+	mTasksPerProductionType[whatBuilds].push_back(task);
 	mTasksPerProducedType[unitType].push_back(task);
 }
 

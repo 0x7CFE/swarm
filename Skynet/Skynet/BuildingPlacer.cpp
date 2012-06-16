@@ -231,17 +231,18 @@ public:
 	
 	bool operator() (TilePosition location) const
 	{
+                // If we could not build here we even no need to check
+                if (BuildingPlacer::Instance().isTileBuildable(location, mType));
+                        return false;
+                
+                // Location should be in our region
+                if (TerrainAnaysis::Instance().getRegion(location) != mRegion)
+                        return false;
+                
 		// Checking whether we're still in our base
 		if (BaseTracker::Instance().getBase(location) != mBase)
 			return false;
 
-		// Location should be in our region
-		if (TerrainAnaysis::Instance().getRegion(location) != mRegion)
-			return false;
-		// If we could not build here we even no need to check
-		if (BuildingPlacer::Instance().isTileBuildable(location, mType));
-		        return false;
-		
 		std::pair<int, Chokepoint> pair = getClosestChokeDistance(location); 
 		if (pair.first >= mminDistance && pair.first < mmaxDistance)
 			return BuildingPlacer::Instance().isLocationNonBlocking(location, mType);
@@ -302,6 +303,8 @@ std::pair<TilePosition, Base> BuildingPlacerClass::buildingLocationToTile(Buildi
 			if(pos != BWAPI::TilePositions::None)
 				return std::make_pair(pos, BaseTracker::Instance().getBase(pos));
 		}
+		break;
+                
 	case BuildingLocation::BaseParimeter:
 	case BuildingLocation::Base:
 		{
@@ -316,7 +319,7 @@ std::pair<TilePosition, Base> BuildingPlacerClass::buildingLocationToTile(Buildi
 		}
 	case BuildingLocation::Expansion:
 			return getExpandLocation();
-	case BuildingLocation::ExpansionGas:
+        case BuildingLocation::ExpansionGas:
 			return getExpandLocation(true);
 	case BuildingLocation::Proxy:
 			//TODO: find a location that isn't on the path between any base to any other base start locations closest to potential enemy locations
@@ -540,13 +543,13 @@ bool BuildingPlacerClass::isLocationBuildable(TilePosition position, BWAPI::Unit
 				}
 			}
 		}
-		for (Unit geyser : UnitTracker::Instance().getGeysers())
+		for (Unit geyser : UnitTracker::Instance().getGeysers() + BaseTracker::Instance().getBase(position)->getRefineries())
 		{
 			if(geyser->accessibility() != AccessType::Dead)
 			{
-				if (geyser->getTilePosition().x() > position.x() - 8 &&                //7
+				if (geyser->getTilePosition().x() > position.x() - 8 &&                //7     Geyser to the left
 					geyser->getTilePosition().y() > position.y() - 6 &&            //5   
-					geyser->getTilePosition().x() < position.x() + 6 &&            //7
+					geyser->getTilePosition().x() < position.x() + 8 &&            //7     Geyser to the right
 					geyser->getTilePosition().y() < position.y() + 5)              //6
 				  
 				{
