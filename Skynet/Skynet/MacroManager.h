@@ -126,6 +126,7 @@ private:
 	std::map<BWAPI::UnitType, std::list<TaskPointer>> mTasksPerProducedType;
 
 	TaskPointer mObserver;
+        TaskPointer mExtraHatchery;
 
 	std::list<MacroItem> mTechItemsToCreate;
 	std::list<std::pair<MacroItem, TaskPointer>> mTechItems;

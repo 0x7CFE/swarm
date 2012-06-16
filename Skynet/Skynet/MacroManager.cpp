@@ -419,58 +419,51 @@ void MacroManagerClass::updateObserverProduction()
 
 void MacroManagerClass::updateProductionProduction()
 {
+        if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+        {
+                if (!BuildOrderManager::Instance().getOrder(Order::MacroProductionFacilities))
+                        return;
+                
+                if (mExtraHatchery && !mExtraHatchery->hasEnded())
+                {
+                        BWAPI::Broodwar->drawText(BWAPI::CoordinateType::Screen, 150, 10, "Extra hatchery ordered: %d", mExtraHatchery->getEndTime() - BWAPI::Broodwar->getFrameCount());
+                        return;
+                }
+                
+                UnitGroup larvae = UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Larva);
+                int idleLarvaCount = 0;
+                for (Unit larva : larvae)
+                        if (!larva->isMorphing())
+                                idleLarvaCount++;
+                        
+                if(idleLarvaCount == 0)
+                        mExtraHatchery = TaskManager::Instance().build(BWAPI::UnitTypes::Zerg_Hatchery, TaskType::MacroExtraProduction, BuildingLocation::Base);
+                return;
+        } 
+        
 	for (UnitToProduce unit : mNormalUnits)
 	{
 		if(hasRequirements(unit.getUnitType()) && unit.canBuildFactory())
 		{
-                        if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
+                        BWAPI::UnitType whatBuilds = unit.getUnitType().whatBuilds().first;
+                        bool unstartedBuild = false;
+                        for (TaskPointer task : mTasksPerProducedType[whatBuilds])
                         {
-                                BWAPI::UnitType whatBuilds = unit.getUnitType().whatBuilds().first;
-                                if(whatBuilds == BWAPI::UnitTypes::Zerg_Larva)
-                                        whatBuilds = BWAPI::UnitTypes::Zerg_Hatchery;
-                                else
-                                        continue; // We're interested only in basic units
-                                
-                                UnitGroup larvae = UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Larva);
-                                int idleLarvaCount = 0;
-                                for (Unit larva : larvae)
-                                        if (!larva->isMorphing())
-                                                idleLarvaCount++;
-
-                                int unstartedCount = 0;
-                                for (TaskPointer task : mTasksPerProducedType[whatBuilds])
-                                {
-                                        if(!task->inProgress())
-                                                unstartedCount++;
-                                }
-                                        
-                                // If there are no idle larvas and we have 
-                                // build tasks then an extra hatchery is needed
-                                if(idleLarvaCount == 0 && unstartedCount > 3) // TODO constant
-                                        TaskManager::Instance().build(whatBuilds, TaskType::MacroExtraProduction);
-                        } 
-                        else                        
-                        {
-                                BWAPI::UnitType whatBuilds = unit.getUnitType().whatBuilds().first;
-                                bool unstartedBuild = false;
-                                for (TaskPointer task : mTasksPerProducedType[whatBuilds])
-                                {
-                                        if(!task->inProgress())
-                                                unstartedBuild = true;
-                                }
-                                if(unstartedBuild)
-                                        continue;
-
-                                int idleOfThis = 0;
-                                for (Unit building : UnitTracker::Instance().selectAllUnits(whatBuilds))
-                                {
-                                        if(building->isCompleted() && !building->isTraining())
-                                                ++idleOfThis;
-                                }
-
-                                if(idleOfThis == 0)
-                                        TaskManager::Instance().build(whatBuilds, TaskType::MacroExtraProduction);
+                                if(!task->inProgress())
+                                        unstartedBuild = true;
                         }
+                        if(unstartedBuild)
+                                continue;
+
+                        int idleOfThis = 0;
+                        for (Unit building : UnitTracker::Instance().selectAllUnits(whatBuilds))
+                        {
+                                if(building->isCompleted() && !building->isTraining())
+                                        ++idleOfThis;
+                        }
+
+                        if(idleOfThis == 0)
+                                TaskManager::Instance().build(whatBuilds, TaskType::MacroExtraProduction);
 		}
 	}
 }
