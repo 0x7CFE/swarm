@@ -14,6 +14,7 @@ public:
 
 private:
 	TaskPointer mLastItem;
+        std::list<TaskPointer> mSupplyTasks;
 };
 
 typedef Singleton<SupplyManagerClass> SupplyManager;

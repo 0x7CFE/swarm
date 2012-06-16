@@ -19,25 +19,30 @@ void SupplyManagerClass::update()
 		{
 			if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
 			{
-				// TODO Rewrite using task pointer lists
-                                // Checking if we're already creating a lot of overlords (probably a HACK)
-				int trainingOverlords = 0;
-				UnitGroup overlords = UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Overlord);
-				for (Unit overlord : overlords)
-				{
-					if (! overlord->isCompleted())
-						trainingOverlords++;
-				}
-				if (trainingOverlords > 2)
+                                if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
                                 {
-                                        if (mLastItem)
-                                                mLastItem->cancel();
-					return; 
+                                        // Removing finished tasks and counting active ones
+                                        for (std::list<TaskPointer>::iterator supplyTask = mSupplyTasks.begin(); supplyTask != mSupplyTasks.end(); )
+                                        {
+                                                if (supplyTask->hasEnded())
+                                                        mSupplyTasks.erase(supplyTask++);
+                                                else
+                                                        ++supplyTask;
+                                        }
+                                        
+                                        // Checking if we're already creating a lot of overlords
+                                        if (mSupplyTasks.size() < 3)
+                                        {
+                                                mLastItem = TaskManager::Instance().build(BWAPI::UnitTypes::Zerg_Overlord, TaskType::Supply);
+                                                mSupplyTasks.push_back(mLastItem);
+                                        }
                                 }
-			}
-		  
-			if(!mLastItem || mLastItem->hasDispatched() || mLastItem->hasEnded())
-				mLastItem = TaskManager::Instance().build(BWAPI::Broodwar->self()->getRace().getSupplyProvider(), TaskType::Supply);
+			} 
+			else 
+                        {
+                                if(!mLastItem || mLastItem->hasDispatched() || mLastItem->hasEnded())
+                                        mLastItem = TaskManager::Instance().build(BWAPI::Broodwar->self()->getRace().getSupplyProvider(), TaskType::Supply);
+                        }
 		}
 	}
 }
