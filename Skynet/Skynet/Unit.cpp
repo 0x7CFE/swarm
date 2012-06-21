@@ -1463,7 +1463,7 @@ void UnitClass::unburrow()
 
 bool UnitClass::unburrowBeforeAction()
 {
-	if (! BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing))
+	if (!BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Burrowing) || !mUnit->getType().isBurrowable())
 		return false;
 	
 	// All transient states should be completed 

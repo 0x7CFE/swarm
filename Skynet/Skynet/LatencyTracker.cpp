@@ -1,4 +1,5 @@
 #include "LatencyTracker.h"
+#include "UnitTracker.h"
 
 const int StormRadius = 64;
 const int StasisRadius = 96;
@@ -29,9 +30,12 @@ void LatencyTrackerClass::update()
                 for (std::map<Unit, std::pair<Unit, int>>::iterator iBroodling = mPendingBroodlings.begin(); iBroodling != mPendingBroodlings.end(); )
                 {
                         int timeWhenCasted = iBroodling->second.second;
-                        if (!iBroodling->first->exists() || (iBroodling->first->getOrder() != BWAPI::Orders::CastSpawnBroodlings && currentTime > timeWhenCasted))
+                        Unit target = iBroodling->second.first;
+                        if (!iBroodling->first->exists() || 
+                                (iBroodling->first->getOrder() != BWAPI::Orders::CastSpawnBroodlings && 
+                                currentTime > timeWhenCasted && 
+                                target->accessibility() == AccessType::Dead))
                         {
-                                Unit target = iBroodling->second.first;
                                 mBroodlingVictims.erase(target);
                                 mPendingBroodlings.erase(iBroodling++);
                         } else
@@ -41,9 +45,12 @@ void LatencyTrackerClass::update()
                 for (std::map<Unit, std::pair<Unit, int>>::iterator iParasite = mPendingParasites.begin(); iParasite != mPendingParasites.end(); )
                 {
                         int timeWhenCasted = iParasite->second.second;
-                        if (!iParasite->first->exists() || (iParasite->first->getOrder() != BWAPI::Orders::CastParasite && currentTime > timeWhenCasted))
+                        Unit target = iParasite->second.first;
+                        if (!iParasite->first->exists() || 
+                                (iParasite->first->getOrder() != BWAPI::Orders::CastParasite && 
+                                currentTime > timeWhenCasted && 
+                                (target->exists() && target->isParasited())))
                         {
-                                Unit target = iParasite->second.first;
                                 mParasiteVictims.erase(target);
                                 mPendingParasites.erase(iParasite++);
                         } else

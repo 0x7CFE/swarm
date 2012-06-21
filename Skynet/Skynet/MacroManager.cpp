@@ -430,6 +430,11 @@ void MacroManagerClass::updateProductionProduction()
                         return;
                 }
                 
+                // Wait 1.5 minutes until new hatchery starts spawning larvae. 
+                // Then decide whether we need more
+                if (mExtraHatchery && (BWAPI::Broodwar->getFrameCount() - mExtraHatchery->getEndTime() < 24 * 90))
+                        return;
+                
                 UnitGroup larvae = UnitTracker::Instance().selectAllUnits(BWAPI::UnitTypes::Zerg_Larva);
                 int idleLarvaCount = 0;
                 for (Unit larva : larvae)
