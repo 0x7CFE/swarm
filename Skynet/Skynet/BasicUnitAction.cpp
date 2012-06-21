@@ -164,6 +164,11 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 	if(closestUnit)
 	{
 		bool doNotEngageClosest = false;
+//                 if (mUnit->getDistance(squadUnitGroup.getCenter()) > closestDistance * 2)
+//                 {
+//                         doNotEngageClosest = true;
+//                 }
+                
 		if(closestDistance < closestUnitRange + 250)
 		{
 			if(squadGoal.getAvoidUnits().count(closestUnit) != 0)
@@ -197,8 +202,11 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 		if(!canAttack)
 			rangeToStayAt = closestUnitRange+32; // NOTE Is this a code that microes dragoons?
 
-		if(actionUnitType.maxEnergy() > 0 && closestUnit->getType() == BWAPI::UnitTypes::Terran_Science_Vessel)
-			rangeToStayAt = std::max(rangeToStayAt, BWAPI::TechTypes::EMP_Shockwave.getWeapon().maxRange()+32);
+		if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Protoss)
+                {
+                        if(actionUnitType.maxEnergy() > 0 && closestUnit->getType() == BWAPI::UnitTypes::Terran_Science_Vessel)
+                                rangeToStayAt = std::max(rangeToStayAt, BWAPI::TechTypes::EMP_Shockwave.getWeapon().maxRange()+32);
+                }
 
 		if(rangeToStayAt != 0 && closestDistance < rangeToStayAt)
 		{
@@ -261,7 +269,7 @@ bool BasicUnitAction::update(const Goal &squadGoal, const UnitGroup &squadUnitGr
 			}
 		}
 	}
-
+	
 	if(currentTargetUnit)
 	{
 		mUnit->attack(currentTargetUnit);

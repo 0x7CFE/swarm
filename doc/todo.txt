@@ -43,3 +43,33 @@ TODO
     Тормозит с армией
     После разрушения экспы строит заново, но забывает про экстрактор
     
+    
+        ID_2 = hydraPreExpand.addItem(Zerg_Zergling, 5, TaskType::Highest);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_1, CallBackType::onCompleted), 1);
+        ID_2 = hydraPreExpand.addItem(Zerg_Zergling,  TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 3);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 1);
+        ID_2 = hydraPreExpand.addItem(Zerg_Drone,     TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 1);
+        ID_2 = hydraPreExpand.addItem(Zerg_Zergling,  TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 3);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 3);
+        ID_2 = hydraPreExpand.addOrder(Order::MacroProductionFacilities, CB(ID_2, CallBackType::onDispatched)); 
+        ID_2 = hydraPreExpand.addItem(Zerg_Zergling,  TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 3);
+        ID_2 = hydraPreExpand.addItem(Zerg_Drone,     TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 1);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 4);
+        ID_2 = hydraPreExpand.addItem(Zerg_Zergling,  TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 3);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 5);
+        ID_2 = hydraPreExpand.addItem(Zerg_Drone,     TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 1);
+        ID_2 = hydraPreExpand.addItem(Zerg_Zergling,  TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 6);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_2, CallBackType::onCompleted), 6);
+
+                hydraPreExpand.addItem(Zerg_Zergling, 5, TaskType::Highest);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_1, CallBackType::onCompleted), 1);
+        hydraPreExpand.addItem(Zerg_Zergling, 3, TaskType::Highest);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_2, CallBackType::onDispatched), 1);
+        hydraPreExpand.addItem(Zerg_Zergling, 3, TaskType::Highest);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_2, CallBackType::onDispatched), 3);
+        hydraPreExpand.addItem(Zerg_Zergling, 3, TaskType::Highest);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_2, CallBackType::onDispatched), 4);
+        hydraPreExpand.addItem(Zerg_Zergling, 3, TaskType::Highest);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_2, CallBackType::onDispatched), 5);
+        hydraPreExpand.addItem(Zerg_Zergling, 6, TaskType::Highest);
+        ID_2 = hydraPreExpand.addItem(Zerg_Hydralisk, TaskType::Highest, CB(ID_2, CallBackType::onDispatched), 6);

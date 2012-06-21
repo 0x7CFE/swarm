@@ -72,7 +72,7 @@ void ExpansionManagerClass::updateDefense(BWAPI::UnitType defenseType, int neede
 	
 	// Base support buildings are needed when there are many (distant) bases
 	std::set<Base> myBases = BaseTracker::Instance().getActiveBases(true);
-	if(myBases.size() >= 2)
+	if(myBases.size() > 2)
 	{
 		// FIXME In case of Zerg defensesNeeded should be counted
 		//       depending on the base chokepoint count
